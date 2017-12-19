@@ -4,11 +4,11 @@ This README would normally document whatever steps are necessary to get your app
 
 ### What is this repository for? ###
 
-* A TODO with Remainder and many more useful feature
+* A TODO with Remainder and many more useful features
 
 ### How do I get set up? ###
 
-* Just pull, huh
+* Just pull,duh !
 
 ### Contribution guidelines ###
 
