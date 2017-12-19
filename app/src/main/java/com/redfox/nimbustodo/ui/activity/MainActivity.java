@@ -62,6 +62,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.redfox.nimbustodo.R;
@@ -100,7 +102,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         , NetworkObserverCallBack, LocationCallBack, DisplayImageCallback, TagImageCallBacks {
 
     private final static String TAG = MainActivity.class.getSimpleName();
-    private static final boolean LOG_DEBUG = false;
+    private static final boolean LOG_DEBUG = true;
+
+    private FirebaseRemoteConfig mFirebaseRemoteConfig;
+    private final static String VERSION_CODE = "VERSION_CODE";
+    private final static String INSTALLED_VERSION_NAME = "1.4";
 
 
     @BindView(R.id.am_toolbar)
@@ -193,6 +199,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setUpHomeTransaction();
         isFabShowing = true;
         showFab();
+        initFireBaseConfig();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setStatusBarColor(ContextCompat.getColor(this, android.R.color.transparent));
@@ -968,6 +975,48 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (mReceiver != null) {
             mReceiver.quitHandlerThread();
         }
+    }
+
+    private void initFireBaseConfig() {
+        mFirebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
+        FirebaseRemoteConfigSettings remoteConfigSettings = new FirebaseRemoteConfigSettings.Builder()
+                .setDeveloperModeEnabled(true)
+                .build();
+        mFirebaseRemoteConfig.setConfigSettings(remoteConfigSettings);
+        mFirebaseRemoteConfig.setDefaults(R.xml.remote_config_defaults);
+        long cacheExpiration = 3600;
+
+        if (mFirebaseRemoteConfig.getInfo().getConfigSettings().isDeveloperModeEnabled()) {
+            cacheExpiration = 0;
+        }
+
+        mFirebaseRemoteConfig.fetch(cacheExpiration)
+                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+
+                            if (LOG_DEBUG) Log.e(TAG, "Fetch Succeeded");
+                            mFirebaseRemoteConfig.activateFetched();
+
+                        } else {
+                            if (LOG_DEBUG) Log.e(TAG, "Fetch Failed");
+                        }
+                        displayWelcomeMessage();
+                    }
+                });
+    }
+
+    private void displayWelcomeMessage() {
+        String result = mFirebaseRemoteConfig.getString(VERSION_CODE);
+        if (LOG_DEBUG) Log.e(TAG, " remote value  : VERSION_CODE  : " + result);
+
+        if (result.contentEquals(INSTALLED_VERSION_NAME)) {
+            if (LOG_DEBUG) Log.e(TAG, " NO UPDATE REQUIRED ");
+        } else {
+            if (LOG_DEBUG) Log.e(TAG, " UPDATE REQUIRED ---");
+        }
+
     }
 
     @Override

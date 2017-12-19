@@ -124,7 +124,7 @@ public class NoteUpdateActivity extends AppCompatActivity implements TagImageCal
     private boolean alarmSchBoolean = false;
 
     private String title;
-    private int recordPosId; //id
+    private int recordPosId;
     private int imageUriPath;
     private String subText;
     private long dateCreation;

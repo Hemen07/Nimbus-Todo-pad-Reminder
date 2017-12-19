@@ -1,33 +1,39 @@
 {
   "project_info": {
-    "project_number": "809659447281",
-    "project_id": "todo2-29b9d"
+    "project_number": "923499485163",
+    "firebase_url": "https://nimbus-todo.firebaseio.com",
+    "project_id": "nimbus-todo",
+    "storage_bucket": "nimbus-todo.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:809659447281:android:8539bb7740cc5a9e",
+        "mobilesdk_app_id": "1:923499485163:android:a25029ec341262ce",
         "android_client_info": {
-          "package_name": "redfoxclassic.hehe"
+          "package_name": "com.redfox.nimbustodo"
         }
       },
       "oauth_client": [
         {
-          "client_id": "809659447281-oh033k8p2kq55d5581rnkun4ur4hk4l8.apps.googleusercontent.com",
+          "client_id": "923499485163-17h0uq8uptl3ahuvoldo4gkhdnk4g6r6.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "923499485163-20used11oekdkh5v7angjt6defqeoaum.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "redfoxclassic.hehe",
+            "package_name": "com.redfox.nimbustodo",
             "certificate_hash": "322d1bb1f73c1a1b45866cf61f25dc7f399539ca"
           }
         },
         {
-          "client_id": "809659447281-hmbp99alkk115ppcisovbp6frc630dmu.apps.googleusercontent.com",
+          "client_id": "923499485163-vrm35b04voeng3br79tprm189n515et0.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDmA7c_mNbTVxH0TWR-PBV7NOjvrgI31OQ"
+          "current_key": "AIzaSyAEz38cKtvs2EnVUfe2oU_g1OzV2vlxxew"
         }
       ],
       "services": {
@@ -35,11 +41,16 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "923499485163-17h0uq8uptl3ahuvoldo4gkhdnk4g6r6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
-          "status": 1
+          "status": 2
         }
       }
     }
