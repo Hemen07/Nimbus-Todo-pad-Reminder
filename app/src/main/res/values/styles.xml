@@ -1,0 +1,420 @@
+<resources xmlns:android="urn:oasis:names:tc:xliff:document:1.2" xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:fontFamily">@font/caviar_dreams</item>
+        <item name="actionModeStyle">@style/ActionModeStyle</item>
+        <item name="windowActionModeOverlay">true</item>
+    </style>
+
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="actionModeStyle">@style/ActionModeStyle</item>
+        <item name="windowActionModeOverlay">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+
+    <!-- activity_main-->
+
+    <!--collapsing  bar      :  Title-->
+    <style name="ExpandedAppBarTitle" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textSize">28sp</item>
+        <item name="android:textColor">@color/color_white</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="CollapsedAppBarTitle" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/color_white</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <!--collapsing  bar      :  Sub-Title-->
+    <style name="ExpandedAppBarSub" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/color_white</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="CollapsedAppBarSub" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">@color/color_white</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <!--nav theme-->
+    <style name="ThemeOverlay.AppCompat.navTheme">
+        <!-- Color of text and icon when SELECTED -->
+        <item name="colorPrimary">@color/highlighted_text_color</item>
+        <!-- Background color when SELECTED -->
+        <item name="colorControlHighlight">@color/highlighted_bg_color</item>
+    </style>
+
+
+    <!--nav_header : profile-->
+    <style name="NavHeaderProfile">
+        <item name="android:contentDescription">@string/nav_header_profile_desc</item>
+        <item name="android:src">@mipmap/ic_launcher</item>
+
+    </style>
+
+    <style name="NavHeaderTitle">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">#0091EA</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:text">@string/nav_header_title_text</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Body1</item>
+
+    </style>
+
+    <style name="NavHeaderEmail">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">#0091EA</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:text">@string/nav_header_email_text</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Body1</item>
+
+    </style>
+
+
+    <style name="NavHeaderNetCheck">
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_centerInParent">true</item>
+        <item name="android:src">@color/net_check_unavailable_color</item>
+        <item name="android:layout_alignParentEnd" tools:targetApi="jelly_bean_mr1">true</item>
+    </style>
+
+
+    <!--Weather Panel -->
+    <style name="WeatherConfigure">
+        <item name="android:textAllCaps">false</item>
+        <item name="android:text">@string/config_weather</item>
+        <item name="android:gravity">right|center_vertical</item>
+        <item name="android:layout_alignParentEnd" tools:targetApi="jelly_bean_mr1">true</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_centerInParent">true</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">#efffffff</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="WeatherTemp">
+        <item name="android:text">@string/temp_text</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_alignParentEnd" tools:targetApi="jelly_bean_mr1">true</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_alignParentBottom">true</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">32sp</item>
+        <item name="android:textColor">#ffb710</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">8dp</item>
+    </style>
+
+    <style name="WeatherIcon">
+        <item name="android:layout_alignParentEnd" tools:targetApi="jelly_bean_mr1">true</item>
+        <item name="android:layout_alignParentRight">true</item>
+
+    </style>
+
+
+    <style name="WeatherCity">
+        <item name="android:text">@string/weather_city</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/color_white_less</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="WeatherCountry">
+        <item name="android:text">@string/weather_country</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/color_white</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+
+    <!--bottom_layout.xml-->
+    <!--root-->
+    <style name="BL_Linear_root_style">
+        <item name="android:layout_alignParentBottom">true</item>
+        <item name="android:background">@color/color_white</item>
+        <item name="android:gravity">center</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+    <!--2nd container-->
+    <style name="BL_LinearTwo_style">
+        <item name="android:weightSum">1</item>
+        <item name="android:gravity">center</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <!--etx-->
+    <style name="BL_Etx_Input_style">
+        <item name="android:background">@null</item>
+        <item name="android:layout_weight">0.99</item>
+        <item name="android:ems">10</item>
+        <item name="android:hint">type your note</item>
+        <item name="android:inputType">textCapSentences|textMultiLine</item>
+        <item name="android:maxHeight">80dp</item>
+        <item name="android:maxLines">4</item>
+        <item name="android:textColor">#1c3b4e</item>
+        <item name="android:textColorHint">#3c7394</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+
+
+    <!--location_picker.xml : -->
+
+    <style name="LP_imv_main_style">
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:layout_width">120dp</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+    <!--text input layout-->
+    <style name="LP_Tipl_style" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/colorAccent</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <!--etx-->
+    <style name="LP_Etx_Input_style">
+        <item name="android:hint">@string/enter_city_name</item>
+        <item name="android:inputType">textCapSentences</item>
+        <item name="android:textColor">#000</item>
+        <item name="android:textColorHint">#000</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <!--TV : only major cities-->
+    <style name="LP_Tv_majorCity_style">
+        <item name="android:text">@string/only_major_cities</item>
+        <item name="android:textColor">#213583</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textStyle">italic</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <!--btn Cancel-->
+    <style name="LP_Btn_cancel_style">
+        <item name="android:background">?attr/selectableItemBackground</item>
+        <item name="android:focusable">true</item>
+        <item name="android:clickable">true</item>
+        <item name="android:text">@string/negative_text_location</item>
+        <item name="android:textColor">@color/net_check_unavailable_color</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <!--btn Submit-->
+    <style name="LP_Btn_submit_style">
+        <item name="android:background">?attr/selectableItemBackground</item>
+        <item name="android:focusable">true</item>
+        <item name="android:clickable">true</item>
+        <item name="android:textColor">@color/net_check_available_color</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+
+    <!--frag_one.xml-->
+    <style name="FO_Rv_style">
+        <item name="android:scrollbarSize">2dp</item>
+        <item name="android:scrollbars">vertical</item>
+        <item name="android:scrollbarThumbVertical">@drawable/fragone_scrollbar</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+
+
+    <!--note_custom_row.xml : cardview-->
+    <style name="nr_root_style" parent="">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/sheet_spacing</item>
+        <item name="android:layout_marginBottom">@dimen/sheet_spacing</item>
+        <item name="android:padding">-3dp</item>
+    </style>
+
+    <!--content_note_update.xml-->
+
+    <!--linear1-->
+    <style name="CN_Linear1_style">
+        <item name="android:weightSum">1</item>
+        <item name="android:gravity">center</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+    <!--etx-->
+    <style name="CN_linear1_Etx_style">
+        <item name="android:layout_weight">0.92</item>
+        <item name="android:ems">10</item>
+        <item name="android:maxHeight">80dp</item>
+        <item name="android:maxLines">4</item>
+        <item name="android:enabled">false</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:gravity">center|left</item>
+        <item name="android:background">@null</item>
+        <item name="android:inputType">textCapSentences|textMultiLine</item>
+        <item name="android:textColor">#ffb710</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:text">LOREAL IPSUM IS DICK</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">0dp</item>
+    </style>
+
+    <!--linear2-->
+    <style name="CN_Linear2_style">
+        <item name="android:background">@drawable/border_linear</item>
+        <item name="android:weightSum">1</item>
+        <item name="android:gravity">center</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <!--Textview-->
+    <style name="CN_Linear2_tv_style">
+        <item name="android:text">@string/add_remainder</item>
+        <item name="android:textColor">@color/color_white</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="cn_linear2_tv_due_date">
+        <item name="android:text">asasda</item>
+        <item name="android:textColor">#1DE9B6</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <!--linear3-->
+    <style name="CN_Linear3_style">
+        <item name="android:background">@drawable/border_linear</item>
+        <item name="android:weightSum">1</item>
+        <item name="android:gravity">center</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">60dp</item>
+    </style>
+    <!--etx-->
+    <style name="CN_linear3_Etx_style">
+        <item name="android:layout_weight">0.96</item>
+        <item name="android:enabled">false</item>
+        <item name="android:hint">@string/add_extra_hint</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:gravity">left</item>
+        <item name="android:background">@null</item>
+        <item name="android:inputType">textCapSentences|textMultiLine</item>
+        <item name="android:maxHeight">80dp</item>
+        <item name="android:maxLines">4</item>
+        <item name="android:textColorHint">@color/extra_note_hint_color</item>
+        <item name="android:textColor">#0091EA</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <!--update tv-->
+    <style name="CN_TV_update_style">
+        <item name="android:text">Updated On</item>
+        <item name="android:textColor">@color/net_check_available_color</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <!--create tv-->
+    <style name="CN_TV_create_style">
+        <item name="android:text">Created On</item>
+        <item name="android:textColor">#e4f4f4f4</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+
+
+    <!--custom notification-->
+    <!--collapsed-->
+
+
+    <style name="AA">
+        <item name="android:textStyle">bold</item>
+        <item name="android:background">#4830ca</item>
+        <item name="android:textColor">@color/color_white</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+
+    <style name="switchStyle">
+        <item name="colorControlActivated">@color/net_check_available_color</item>
+    </style>
+
+    <!--+ loll-->
+    <style name="bottomsheet_btn">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+
+    <style name="ActionModeStyle" parent="@style/Widget.AppCompat.ActionMode">
+        <item name="background">@color/pink_200</item>
+    </style>
+
+    <style name="CustomDialog" parent="android:Theme.Dialog">
+        <item name="android:textColorPrimary">@color/colorPrimary</item>
+        <item name="android:background">@color/color_white</item>
+        <item name="android:fontFamily">@font/caviar_dreams</item>
+    </style>
+
+
+</resources>

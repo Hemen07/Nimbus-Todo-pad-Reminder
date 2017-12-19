@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/note_row_frame"
+    style="@style/nr_root_style"
+    android:background="@android:color/transparent">
+    <!-- -->
+    <RelativeLayout
+        android:id="@+id/note_row_container"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true">
+
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/note_row_Imv_tag"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp" />
+
+
+        <TextView
+            android:id="@+id/note_row_tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_toEndOf="@+id/note_row_Imv_tag"
+            android:layout_toRightOf="@+id/note_row_Imv_tag"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:paddingLeft="20dp"
+            android:paddingStart="20dp"
+            android:paddingTop="3dp"
+            android:text="That was a dick move yeah we know rha"
+            android:textColor="#ffb710"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/note_row_tv_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:text="10/12"
+            android:textColor="#cfcfcf"
+            android:textSize="12sp" />
+
+        <ImageView
+            android:id="@+id/note_row_imv_done"
+            android:layout_width="20dp"
+            android:layout_height="15dp"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/note_row_tv_date"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:visibility="gone"
+            app:srcCompat="@drawable/ic_check" />
+
+        <RelativeLayout
+            android:id="@+id/note_row_alarm_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/note_row_Imv_tag"
+            android:layout_toEndOf="@+id/note_row_Imv_tag"
+            android:layout_toRightOf="@+id/note_row_Imv_tag"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/note_row_imv_alarm"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginStart="20dp"
+                app:srcCompat="@drawable/ic_alarm_on" />
+
+            <TextView
+                android:id="@+id/note_row_tv_time"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
+                android:layout_toEndOf="@+id/note_row_imv_alarm"
+                android:layout_toRightOf="@+id/note_row_imv_alarm"
+                android:gravity="center"
+                android:text="2.05pm/10-Dec"
+                android:textColor="@color/color_white"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/note_row_extraNote_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/note_row_Imv_tag"
+            android:layout_toEndOf="@+id/note_row_alarm_container"
+            android:layout_toRightOf="@+id/note_row_alarm_container"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/note_row_imv_extra_note"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginStart="20dp"
+                app:srcCompat="@drawable/ic_docs" />
+
+            <TextView
+                android:id="@+id/note_row_tv_extra"
+                android:layout_width="60dp"
+                android:layout_height="20dp"
+                android:layout_marginLeft="2dp"
+                android:layout_marginStart="2dp"
+                android:layout_toEndOf="@+id/note_row_imv_extra_note"
+                android:layout_toRightOf="@+id/note_row_imv_extra_note"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:maxLines="1"
+                android:textColor="#0091EA"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+</FrameLayout>
+
+

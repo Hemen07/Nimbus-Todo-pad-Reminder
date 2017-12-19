@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#e42e5971"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:mContext="redfoxclassic.hehe.ui.activity.NoteUpdateActivity"
+    tools:showIn="@layout/activity_note_update">
+
+
+    <LinearLayout
+        android:id="@+id/au_linear1"
+        style="@style/CN_Linear1_style"
+        android:layout_marginTop="50dp">
+
+        <EditText
+            android:id="@+id/au_etxTitle"
+            style="@style/CN_linear1_Etx_style"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp" />
+
+
+        <ImageView
+            android:id="@+id/au_editIcon"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            app:srcCompat="@drawable/ic_edit_note" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/au_linear2"
+        style="@style/CN_Linear2_style"
+        android:layout_below="@+id/au_linear1"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="20dp">
+
+        <ImageView
+            android:id="@+id/au_imv_alarm_cancel"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:contentDescription="@string/au_alarm_cancel_imb_desc"
+            android:padding="2dp"
+            android:visibility="gone"
+            app:srcCompat="@drawable/ic_alarm_cancel" />
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="0.96">
+
+
+            <TextView
+                android:id="@+id/au_tv_alarm"
+                style="@style/CN_Linear2_tv_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                tools:ignore="RtlSymmetry" />
+
+            <ImageView
+                android:id="@+id/au_imv_due"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="20dp"
+                android:layout_marginStart="20dp"
+                android:layout_toEndOf="@+id/au_tv_alarm"
+                android:layout_toRightOf="@+id/au_tv_alarm"
+                app:srcCompat="@drawable/ic_date" />
+
+
+            <TextView
+                android:id="@+id/au_tv_dueDate"
+                style="@style/cn_linear2_tv_due_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/au_tv_alarm"
+                android:layout_alignBottom="@+id/au_tv_alarm"
+                android:layout_marginLeft="7dp"
+                android:layout_marginStart="7dp"
+                android:layout_toEndOf="@+id/au_imv_due"
+                android:layout_toRightOf="@+id/au_imv_due"
+                tools:ignore="RtlSymmetry" />
+
+
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/au_imv_alarm"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:contentDescription="@string/au_alarm_imv_desc"
+            app:srcCompat="@drawable/ic_alarm_default" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/au_linear3"
+        style="@style/CN_Linear3_style"
+        android:layout_below="@+id/au_linear2"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="20dp">
+
+        <EditText
+            android:id="@+id/au_etx_extra_note_add"
+            style="@style/CN_linear3_Etx_style"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:paddingRight="10dp" />
+
+        <ImageView
+            android:id="@+id/au_imv_extraNote"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:contentDescription="@string/au_extra_imv_desc"
+            app:srcCompat="@drawable/ic_docs" />
+
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/au_tv_updateDate"
+        style="@style/CN_TV_update_style"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/au_linear3"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="5dp" />
+
+    <RelativeLayout
+        android:id="@+id/au_relative_taskDone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/au_linear4"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="10dp"
+        android:visibility="gone">
+
+        <com.uniquestudio.library.CircleCheckBox
+            android:id="@+id/au_cBox_taskdone"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            app:background_color="#FFEB3B"
+            app:border_color="@android:color/transparent"
+            app:checked="true"
+            app:tick_color="#0091EA" />
+
+
+        <TextView
+            android:id="@+id/au_tv_taskProgress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_toRightOf="@+id/au_cBox_taskdone"
+            android:text="Task Completed..."
+            android:textColor="@color/fab_sheet_bg"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+
+    <LinearLayout
+        android:id="@+id/au_linear4"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical">
+
+
+        <TextView
+            android:id="@+id/au_bottom_separator"
+            android:layout_width="match_parent"
+            android:layout_height="1.3dp"
+            android:background="@color/fab_sheet_bg" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <TextView
+                android:id="@+id/au_tv_createDate"
+                style="@style/CN_TV_create_style"
+                android:layout_marginLeft="10dp" />
+
+
+            <ImageView
+                android:id="@+id/au_btn_archive"
+                android:layout_width="60dp"
+                android:layout_height="35dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="3dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:paddingLeft="20dp"
+                app:srcCompat="@drawable/ic_archive" />
+        </RelativeLayout>
+
+
+    </LinearLayout>
+
+
+</RelativeLayout>

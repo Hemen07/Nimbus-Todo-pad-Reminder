@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/am_rl_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/nav_header_bg_color"
+    android:fitsSystemWindows="true">
+
+    <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/am_coordlayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        tools:mContext=".ui.activity.MainActivity">
+
+
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/am_appBarLayout"
+            android:layout_width="match_parent"
+            android:layout_height="220dp"
+            android:fitsSystemWindows="true"
+            android:paddingTop="20dp"
+            android:theme="@style/AppTheme.AppBarOverlay">
+
+
+
+            <android.support.design.widget.SubtitleCollapsingToolbarLayout
+                android:id="@+id/am_colToolbar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:contentScrim="?attr/colorPrimary"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true">
+
+
+                    <Button
+                        android:id="@+id/am_configBtn"
+                        style="@style/WeatherConfigure"
+                        android:layout_marginEnd="20dp"
+                        android:layout_marginRight="20dp"
+                        android:visibility="visible" />
+
+
+                    <TextView
+                        android:id="@+id/weather_temperature"
+                        style="@style/WeatherTemp"
+                        android:layout_marginBottom="25dp"
+                        android:layout_marginEnd="22dp"
+                        android:layout_marginRight="22dp"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        app:srcCompat="@drawable/ic_weather_unknown"
+                        android:id="@+id/weather_image"
+                        style="@style/WeatherIcon"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:layout_above="@+id/weather_temperature"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginEnd="30dp"
+                        android:layout_marginRight="30dp"
+                        android:contentDescription="@string/weather_image"
+                        android:visibility="visible" />
+
+
+                    <TextView
+                        android:id="@+id/weather_city"
+                        style="@style/WeatherCity"
+                        android:visibility="visible" />
+
+                    <TextView
+                        android:id="@+id/weather_country"
+                        style="@style/WeatherCountry"
+                        android:layout_below="@+id/weather_city"
+                        android:visibility="visible" />
+
+                </RelativeLayout>
+
+
+                <android.support.v7.widget.Toolbar
+                    android:id="@+id/am_toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:background="@android:color/transparent"
+                    app:layout_collapseMode="pin"
+                    app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+            </android.support.design.widget.SubtitleCollapsingToolbarLayout>
+
+        </android.support.design.widget.AppBarLayout>
+
+
+        <android.support.v4.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <include
+                android:id="@+id/content_mainId"
+                layout="@layout/content_main" />
+
+        </android.support.v4.widget.NestedScrollView>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fabBottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_margin="@dimen/fab_margin"
+            app:backgroundTint="@color/pink_200"
+            app:srcCompat="@drawable/ic_add" />
+
+
+    </android.support.design.widget.CoordinatorLayout>
+
+    <include layout="@layout/bottom_layout" />
+</RelativeLayout>

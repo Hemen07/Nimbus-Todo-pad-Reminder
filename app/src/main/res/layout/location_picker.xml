@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:background="@android:color/transparent">
+
+        <ImageView
+            android:id="@+id/location_picker_imv"
+            style="@style/LP_imv_main_style"
+            android:contentDescription="@string/lp_imv_desc"
+            app:srcCompat="@drawable/ic_footer_rainbow" />
+
+    </RelativeLayout>
+
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/location_picker_txt_input_layout"
+        style="@style/LP_Tipl_style"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="20dp"
+        app:errorEnabled="true">
+
+        <EditText
+            android:id="@+id/location_picker_etx"
+            style="@style/LP_Etx_Input_style"
+            android:drawablePadding="10dp" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <TextView
+        android:id="@+id/location_picker_tv_major"
+        style="@style/LP_Tv_majorCity_style"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp">
+
+
+        <Button
+            android:id="@+id/location_picker_cancel_btn"
+            style="@style/LP_Btn_cancel_style"
+            android:layout_toLeftOf="@+id/location_picker_btn"
+            android:layout_toStartOf="@+id/location_picker_btn"
+            android:padding="10dp" />
+
+        <Button
+            android:text="@string/positive_text_location"
+            android:id="@+id/location_picker_btn"
+            style="@style/LP_Btn_submit_style"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:padding="10dp" />
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="20dp" />
+
+
+</LinearLayout>

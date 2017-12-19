@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "809659447281",
+    "project_id": "todo2-29b9d"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:809659447281:android:8539bb7740cc5a9e",
+        "android_client_info": {
+          "package_name": "redfoxclassic.hehe"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "809659447281-oh033k8p2kq55d5581rnkun4ur4hk4l8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "redfoxclassic.hehe",
+            "certificate_hash": "322d1bb1f73c1a1b45866cf61f25dc7f399539ca"
+          }
+        },
+        {
+          "client_id": "809659447281-hmbp99alkk115ppcisovbp6frc630dmu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDmA7c_mNbTVxH0TWR-PBV7NOjvrgI31OQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

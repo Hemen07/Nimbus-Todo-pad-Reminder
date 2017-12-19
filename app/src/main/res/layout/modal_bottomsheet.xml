@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#F3F3F3"
+    android:orientation="vertical"
+    android:paddingTop="@dimen/activity_vertical_margin">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="#F3F3F3">
+
+
+        <ImageView
+            android:id="@+id/au_bs_imv_share"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="30dp"
+            android:layout_toLeftOf="@+id/au_bs_imv_info"
+            app:srcCompat="@drawable/ic_share" />
+
+        <ImageView
+            android:id="@+id/au_bs_imv_info"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerInParent="true"
+            app:srcCompat="@drawable/ic_info" />
+
+        <com.uniquestudio.library.CircleCheckBox
+            android:id="@+id/au_bs_cBox_mark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_toRightOf="@+id/au_bs_imv_info"
+            android:padding="2dp"
+            app:background_color="@color/color_white"
+            app:border_color="@color/color_white"
+            app:tick_color="#0091EA" />
+
+
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/au_bs_btn_cancel"
+        style="@style/bottomsheet_btn"
+        android:layout_gravity="center"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:text="DISMISS"
+        android:textColor="#D04D5B" />
+</LinearLayout>

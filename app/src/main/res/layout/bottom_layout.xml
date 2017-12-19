@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/bs_root_bottom_layout"
+    style="@style/BL_Linear_root_style">
+
+    <LinearLayout
+        style="@style/BL_LinearTwo_style"
+        android:layout_marginTop="20dp">
+
+
+        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/bs_imv_tag"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/tag_default"
+            app:civ_border_color="@android:color/transparent"
+            app:civ_border_width="2dp" />
+
+
+        <EditText
+            android:id="@+id/bs_Etx"
+            style="@style/BL_Etx_Input_style"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:paddingLeft="10dp" />
+
+
+        <ImageView
+            android:id="@+id/bs_imv_save"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            app:srcCompat="@drawable/ic_arrow_right" />
+
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="20dp" />
+
+</LinearLayout>
