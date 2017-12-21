@@ -170,33 +170,20 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.MyViewHolder> 
 
 
     private void setUpGravity(MyViewHolder myViewHolder) {
-        //do logic here moving item blah blah
         if (isAlarmScheduled == 1 && hasExtraNote.length() != 0) {
-
             myViewHolder.nrTitleTv.setGravity(Gravity.LEFT | Gravity.START);
-
         } else if (isAlarmScheduled == 0 && hasExtraNote.length() != 0) {
-
             myViewHolder.nrTitleTv.setGravity(Gravity.LEFT | Gravity.START);
-            //here
-
-
         } else if (isAlarmScheduled == 1 && hasExtraNote.length() == 0) {
-
             myViewHolder.nrTitleTv.setGravity(Gravity.LEFT | Gravity.START);
-
-
         } else if (isAlarmScheduled == 0 && hasExtraNote.length() == 0) {
             myViewHolder.nrTitleTv.setGravity(Gravity.CENTER | Gravity.LEFT | Gravity.START);
-
         }
-
     }
 
     private void setUpAlarmVisibility(MyViewHolder myViewHolder) {
         if (isAlarmScheduled == 1) {
             myViewHolder.nrAlarmContainer.setVisibility(View.VISIBLE);
-
         } else {
             myViewHolder.nrAlarmContainer.setVisibility(View.GONE);
         }

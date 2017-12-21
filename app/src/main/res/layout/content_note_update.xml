@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#e42e5971"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:mContext="redfoxclassic.hehe.ui.activity.NoteUpdateActivity"
+    tools:mContext="com.redfox.nimbustodo.ui.activity.NoteUpdateActivity"
     tools:showIn="@layout/activity_note_update">
 
 

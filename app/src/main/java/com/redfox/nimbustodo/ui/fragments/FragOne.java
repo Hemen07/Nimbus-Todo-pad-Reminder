@@ -240,7 +240,7 @@ public class FragOne extends Fragment implements AdapterCallBack, UtilDialog.Ale
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             MenuInflater inflater = mode.getMenuInflater();
-            inflater.inflate(R.menu.action_mode_menu, menu);
+            inflater.inflate(R.menu.action_mode_menu_frag_one, menu);
             return true;
         }
 

@@ -1,9 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fragTwo_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#f30">
+    android:background="@color/frag_one_bg_color"
+    android:orientation="vertical">
+    <!--#a4447b9c-->
+
+    <LinearLayout
+        android:id="@+id/intro_card2_root"
+        android:layout_width="match_parent"
+        android:layout_height="135dp"
+        android:background="#fff"
+        android:baselineAligned="false"
+        android:orientation="horizontal"
+        android:weightSum="1">
 
 
-</RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.72"
+            android:background="#2e6391">
+
+
+            <ImageView
+                android:id="@+id/intro_card2_imv"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_centerInParent="true"
+                android:src="@mipmap/ic_launcher" />
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_weight="0.25">
+
+            <TextView
+                android:id="@+id/intro_card2_title_tv"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_marginTop="8dp"
+                android:text="Archived Section"
+                android:textColor="#000"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/intro_card2_sub_text_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/intro_card2_title_tv"
+                android:layout_marginTop="8dp"
+                android:text="A lorem ipsum is total dick, fucking noob Shut the fuck up."
+                android:textColor="#000"
+                android:textSize="14sp" />
+
+            <Button
+                android:id="@+id/intro_card2_dismiss_btn"
+                style="@style/LP_Btn_submit_style"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/intro_card2_sub_text_tv"
+                android:layout_marginTop="10dp"
+                android:gravity="left|center"
+                android:text="GOT IT"
+                android:textColor="@color/pink_200" />
+
+        </RelativeLayout>
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/fragTwo_recyclerView"
+        style="@style/FO_Rv_style" />
+
+</LinearLayout>

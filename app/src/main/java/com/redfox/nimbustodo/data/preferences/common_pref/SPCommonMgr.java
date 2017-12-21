@@ -77,13 +77,24 @@ public class SPCommonMgr {
         return sharedPreferences.getString(UtilCommonConstants.IS_SIGNED_EMAIL, "");
     }
 
+    //fragOne
     public void saveIntroCardVisibility(int status) {
-        editor.putInt(UtilCommonConstants.INTRO_CARD, status);
+        editor.putInt(UtilCommonConstants.INTRO_CARD_1, status);
         editor.apply();
     }
 
     public Integer getIntroCardVisibility() {
-        return sharedPreferences.getInt(UtilCommonConstants.INTRO_CARD, 0);
+        return sharedPreferences.getInt(UtilCommonConstants.INTRO_CARD_1, 0);
+    }
+
+    //fragTwo
+    public void saveIntroCardVisibility2(int status) {
+        editor.putInt(UtilCommonConstants.INTRO_CARD_2, status);
+        editor.apply();
+    }
+
+    public Integer getIntroCardVisibility2() {
+        return sharedPreferences.getInt(UtilCommonConstants.INTRO_CARD_2, 0);
     }
 
 

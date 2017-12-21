@@ -26,9 +26,11 @@ public class UtilCommonConstants {
 
     public final static String ARCHIVE = "ARCHIVE";
     public final static String DELETE = "DELETE";
+    public final static String RESTORE = "RESTORE";
 
 
-    public final static String INTRO_CARD = "INTRO_CARD";
+    public final static String INTRO_CARD_1 = "INTRO_CARD_1";
+    public final static String INTRO_CARD_2 = "INTRO_CARD_2";
 
 
 }
