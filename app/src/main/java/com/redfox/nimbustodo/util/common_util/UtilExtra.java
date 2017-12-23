@@ -103,5 +103,24 @@ public class UtilExtra {
         }
     }
 
+    //fragTwo
+    public static void dialogUpdate(final Context context) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Update Available !! ");
+        builder.setMessage("Got an update, brought some more useful features..");
+        builder.setCancelable(true);
+        builder.setPositiveButton("UPDATE", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                context.startActivity(new Intent(Intent.ACTION_VIEW,
+                        Uri.parse("https://play.google.com/store/apps/details?id=com.sivantasoftware.kidstiffin")));
+            }
+        });
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+
+    }
 
 }

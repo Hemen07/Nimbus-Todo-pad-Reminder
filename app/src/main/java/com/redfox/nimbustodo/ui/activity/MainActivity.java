@@ -878,6 +878,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             if (LOG_DEBUG) Log.e(TAG, " NO UPDATE REQUIRED ");
         } else {
             if (LOG_DEBUG) Log.e(TAG, " UPDATE REQUIRED ---");
+            UtilExtra.dialogUpdate(MainActivity.this);
+            finish();
         }
 
     }
