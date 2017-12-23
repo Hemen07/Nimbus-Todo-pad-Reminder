@@ -63,8 +63,6 @@
     <!--nav_header : profile-->
     <style name="NavHeaderProfile">
         <item name="android:contentDescription">@string/nav_header_profile_desc</item>
-        <item name="android:src">@mipmap/ic_launcher</item>
-
     </style>
 
     <style name="NavHeaderTitle">

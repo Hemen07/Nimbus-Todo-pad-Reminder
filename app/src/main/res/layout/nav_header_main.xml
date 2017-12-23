@@ -15,7 +15,8 @@
         android:id="@+id/am_nav_header_profile"
         style="@style/NavHeaderProfile"
         android:layout_width="60dp"
-        android:layout_height="60dp" />
+        android:layout_height="60dp"
+        app:srcCompat="@drawable/ic_profile" />
 
 
     <TextView

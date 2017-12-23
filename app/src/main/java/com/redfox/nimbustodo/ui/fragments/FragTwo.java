@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -87,6 +88,10 @@ public class FragTwo extends Fragment implements AdapterCallBack, UtilDialog.Ale
     private int mCardVisibility;
     private Handler handlerIntroCard;
 
+    private AlertDialog alertDialog;
+    private TextView titleTv;
+    private TextView subTv;
+
     public static FragTwo getInstance() {
         return new FragTwo();
     }
@@ -102,6 +107,7 @@ public class FragTwo extends Fragment implements AdapterCallBack, UtilDialog.Ale
         if (mDataLoaded == true) {
             loadData();
         }
+        setUpArchiveDialog();
         return v;
     }
 
@@ -148,11 +154,17 @@ public class FragTwo extends Fragment implements AdapterCallBack, UtilDialog.Ale
     @Override
     public void onRowClick(int position, View view, ImageView sharedImv) {
         if (LOG_DEBUG) Log.d(TAG, " ROW clicked at : " + position);
+        titleTv.setText(noteModelList.get(position).getTitle());
+        subTv.setText(noteModelList.get(position).getSub_text());
 
         if (isMultiSelect) {
             multi_select(position);
         } else {
-            //show Alert DIalog : containing classic Notes
+            if (alertDialog != null) {
+                alertDialog.show();
+            }
+
+
         }
     }
 
@@ -273,6 +285,7 @@ public class FragTwo extends Fragment implements AdapterCallBack, UtilDialog.Ale
         if (handlerIntroCard != null) {
             handlerIntroCard.removeCallbacks(null);
         }
+
     }
 
 
@@ -282,6 +295,9 @@ public class FragTwo extends Fragment implements AdapterCallBack, UtilDialog.Ale
         unbinder.unbind();
         noteModelList.clear();
         if (LOG_DEBUG) Log.d(TAG, "onDestroyView()");
+        if (alertDialog != null) {
+            alertDialog.dismiss();
+        }
     }
 
 
@@ -403,6 +419,29 @@ public class FragTwo extends Fragment implements AdapterCallBack, UtilDialog.Ale
     @OnClick(R.id.fragTwo_archive_imv_info)
     public void onImvInfo() {
         UtilExtra.dialogArchiveInfo(v.getContext());
+
+    }
+
+    private void setUpArchiveDialog() {
+
+        final AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+
+        LayoutInflater layoutInflater = LayoutInflater.from(v.getContext());
+        final View customView = layoutInflater.inflate(R.layout.archive_dialog, null);
+        builder.setView(customView);
+
+        titleTv = (TextView) customView.findViewById(R.id.archive_dialog_titleTv);
+        subTv = (TextView) customView.findViewById(R.id.archive_dialog_subTv);
+        Button btnCancel = (Button) customView.findViewById(R.id.archive_dialog_dismissBtn);
+
+        alertDialog = builder.create();
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+            }
+        });
+
 
     }
 }

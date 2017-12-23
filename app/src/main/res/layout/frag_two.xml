@@ -9,13 +9,13 @@
     <!--#a4447b9c-->
 
     <LinearLayout
+        android:visibility="gone"
         android:id="@+id/intro_card2_root"
         android:layout_width="match_parent"
         android:layout_height="135dp"
         android:background="#fff"
         android:baselineAligned="false"
         android:orientation="horizontal"
-        android:visibility="gone"
         android:weightSum="1">
 
 
@@ -69,7 +69,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/intro_card2_title_tv"
                 android:layout_marginTop="8dp"
-                android:text="A lorem ipsum is total dick, fucking noob Shut the fuck up."
+                android:text="Here, You can restore note/notes or delete them permanently."
                 android:textColor="#000"
                 android:textSize="14sp" />
 

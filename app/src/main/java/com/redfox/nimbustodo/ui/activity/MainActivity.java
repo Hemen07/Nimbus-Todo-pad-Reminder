@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -46,20 +45,6 @@ import android.widget.Toast;
 
 import com.bumptech.glide.GenericTransitionOptions;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.SimpleTarget;
-import com.bumptech.glide.request.transition.Transition;
-import com.firebase.jobdispatcher.Constraint;
-import com.firebase.jobdispatcher.FirebaseJobDispatcher;
-import com.firebase.jobdispatcher.GooglePlayDriver;
-import com.firebase.jobdispatcher.Job;
-import com.firebase.jobdispatcher.Lifetime;
-import com.firebase.jobdispatcher.RetryStrategy;
-import com.firebase.jobdispatcher.Trigger;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.crash.FirebaseCrash;
@@ -72,7 +57,6 @@ import com.redfox.nimbustodo.data.db.DBMgr;
 import com.redfox.nimbustodo.data.model.NoteModel;
 import com.redfox.nimbustodo.data.preferences.common_pref.SPCommonMgr;
 import com.redfox.nimbustodo.data.preferences.weather_pref.SPWeatherMgr;
-import com.redfox.nimbustodo.job.WeatherJobService;
 import com.redfox.nimbustodo.network.NetworkAsync;
 import com.redfox.nimbustodo.network.NetworkCallbacks;
 import com.redfox.nimbustodo.network.NetworkObserverCallBack;
@@ -83,6 +67,7 @@ import com.redfox.nimbustodo.ui.interfaces.LocationCallBack;
 import com.redfox.nimbustodo.ui.interfaces.TagImageCallBacks;
 import com.redfox.nimbustodo.util.common_util.UtilCal;
 import com.redfox.nimbustodo.util.common_util.UtilExtra;
+import com.redfox.nimbustodo.util.common_util.UtilJobs;
 import com.redfox.nimbustodo.util.common_util.UtilSnackBar;
 import com.redfox.nimbustodo.util.common_util.UtilStorage;
 import com.redfox.nimbustodo.util.common_util.UtilTagImage;
@@ -103,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         , NetworkObserverCallBack, LocationCallBack, DisplayImageCallback, TagImageCallBacks {
 
     private final static String TAG = MainActivity.class.getSimpleName();
-    private static final boolean LOG_DEBUG = false;
+    private static final boolean LOG_DEBUG = true;
 
     private FirebaseRemoteConfig mFirebaseRemoteConfig;
     private final static String VERSION_CODE = "VERSION_CODE";
@@ -169,8 +154,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private boolean isLastEntry = false; //to remove entry : based on this value
 
     private boolean shouldExit = false;  // exit strategy based on this
-    private GoogleSignInClient googleSignInClient;
-    private static final int REQ_CODE_SIGN_IN = 12;
 
     private boolean isSignedIn = false;
     private String prefDisplayName;
@@ -194,7 +177,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setUpDrawer();
         setUpNavHeader();
         setUpNavigationView();
-        setUpGoogleApi();
         setUpBackStackListener();
         setUpReceiver();
         setUpConfigureButton();
@@ -212,25 +194,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void setUpSharedPref() {
         spWeatherMgr = new SPWeatherMgr(MainActivity.this);
         spCommonMgr = new SPCommonMgr(MainActivity.this);
-        loadSignInData();
-    }
-
-    private void loadSignInData() {
-        int isSignedIn = spCommonMgr.getSignInStatus();
-        prefDisplayName = spCommonMgr.getSignInName();
-        prefEmail = spCommonMgr.getSignInEmail();
-
-        if (isSignedIn == 1) {
-            btnSignOut.setText("SIGN OUT");
-            this.isSignedIn = true;
-        } else {
-            btnSignOut.setText("SIGN IN");
-            this.isSignedIn = false;
-        }
-
-        if (isSignedIn == 1 && this.isSignedIn == true) {
-            profileBitmap = UtilStorage.getProfileImage(MainActivity.this);
-        }
     }
 
     private void setUpToolbar() {
@@ -304,20 +267,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navView.setNavigationItemSelectedListener(this);
     }
 
-    private void setUpGoogleApi() {
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
-
-        googleSignInClient = GoogleSignIn.getClient(this, gso);
-
-    }
-
-    private void signIn() {
-        Intent signInIntent = googleSignInClient.getSignInIntent();
-        startActivityForResult(signInIntent, REQ_CODE_SIGN_IN);
-    }
-
     private void setUpBackStackListener() {
         getFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
             @Override
@@ -373,22 +322,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void setUpPeriodicJob() {
-        if (LOG_DEBUG) Log.e(TAG, " setUpPeriodicJob()");
+        if (LOG_DEBUG) Log.e(TAG, " setUpJobs()");
 
-        FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(MainActivity.this));
-
-        Job myJob = dispatcher.newJobBuilder()
-                .setService(WeatherJobService.class)
-                .setTag(WeatherJobService.class.getSimpleName())
-                .setRecurring(true)
-                .setLifetime(Lifetime.FOREVER)
-                .setRetryStrategy(RetryStrategy.DEFAULT_EXPONENTIAL)
-                .setTrigger(Trigger.executionWindow(5 * 60, 15 * 60))
-                .addConstraint(Constraint.ON_ANY_NETWORK)
-                .build();
-
-        dispatcher.mustSchedule(myJob);
+        UtilJobs.setUpPeriodicJob(this);
+        UtilJobs.setUpAutoDeleteJob(this);
+        UtilJobs.setUpMoveToArchiveJob(this);
     }
+
 
     private void setUpHomeTransaction() {
         doTransaction(FragOne.getInstance(), true);
@@ -852,64 +792,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
-        if (requestCode == REQ_CODE_SIGN_IN) {
-            // The Task returned from this call is always completed, no need to attach
-            // a listener.
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            handleSignInResult(task);
-        }
-    }
-
-    private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
-        try {
-            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
-            loadSuccessSignInData(account);
-
-        } catch (ApiException e) {
-            Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
-            loadDefaultSignInData();
-        }
-    }
-
-    private void loadSuccessSignInData(GoogleSignInAccount account) {
-        if (account != null) {
-
-            isSignedIn = true;
-            btnSignOut.setText("SIGN OUT");
-
-            String displayName = account.getDisplayName();
-            navTitle.setText(displayName);
-            String email = account.getEmail();
-            navEmail.setText(email);
-
-
-            String arr[] = displayName.split(" ", 0);
-            clpsToolbar.setTitle("Hi" + ", " + arr[0]);
-
-            if (spCommonMgr != null) {
-                spCommonMgr.saveSignInStatus(1);
-                spCommonMgr.saveSignInName(displayName);
-                spCommonMgr.saveSignInEmail(email);
-            }
-
-            Uri imageUri = account.getPhotoUrl();
-            Glide.with(this).asBitmap().load(imageUri).into(new SimpleTarget<Bitmap>() {
-                @Override
-                public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
-                    navProfile.setImageBitmap(resource);
-                    UtilStorage.saveProfileImage(MainActivity.this, resource);
-
-                }
-            });
-        }
-    }
-
-
     private void loadDefaultSignInData() {
         isSignedIn = false;
 
@@ -918,29 +800,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         String email = getString(R.string.profile_default_email);
         navEmail.setText(email);
         clpsToolbar.setTitle(getString(R.string.greetings));
-        Glide.with(this).asBitmap().load(R.mipmap.ic_launcher).into(navProfile);
+        Glide.with(this).asBitmap().load(R.drawable.ic_profile).into(navProfile);
     }
 
     @OnClick(R.id.aa_btn_signOut)
     public void onViewClickedSingOut() {
-
-        if (isSignedIn == true) {
-            googleSignInClient.signOut()
-                    .addOnCompleteListener(this, new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            Toast.makeText(MainActivity.this, "You have been signed out..", Toast.LENGTH_SHORT).show();
-                            loadDefaultSignInData();
-                            btnSignOut.setText("SIGN IN");
-                            if (spCommonMgr != null) {
-                                spCommonMgr.saveSignInStatus(0);
-                            }
-
-                        }
-                    });
-        } else if (isSignedIn == false) {
-            signIn();
-        }
     }
 
     @Override

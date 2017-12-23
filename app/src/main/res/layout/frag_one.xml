@@ -9,11 +9,11 @@
     <!--#a4447b9c-->
 
     <LinearLayout
+        android:visibility="gone"
         android:id="@+id/intro_card_root"
         android:layout_width="match_parent"
         android:layout_height="135dp"
         android:background="#fff"
-        android:visibility="gone"
         android:baselineAligned="false"
         android:orientation="horizontal"
         android:weightSum="1">
@@ -32,6 +32,7 @@
                 android:layout_height="80dp"
                 android:layout_centerInParent="true"
                 android:src="@drawable/main_logo" />
+
             <ImageView
                 android:id="@+id/intro_card_small_icon_Imv"
                 android:layout_width="18.2dp"
@@ -57,7 +58,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:layout_marginTop="8dp"
-                android:text="Unwanted CatchyPhrase"
+                android:text="Hey, What's up "
                 android:textColor="#000"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -68,7 +69,8 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/intro_card_title_tv"
                 android:layout_marginTop="8dp"
-                android:text="A lorem ipsum is total dick, fucking noob Shut the fuck up."
+                android:text="Add some important task/todo and finish it.
+"
                 android:textColor="#000"
                 android:textSize="14sp" />
 
