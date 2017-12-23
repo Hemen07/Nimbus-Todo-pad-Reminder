@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:orientation="vertical"
     android:padding="8dp">
 
     <RelativeLayout
@@ -16,12 +17,8 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:contentDescription="@string/notification_imv_desc"
-            android:paddingBottom="1dp"
-            android:paddingEnd="6dp"
-            android:paddingLeft="4dp"
-            android:paddingRight="6dp"
-            android:paddingStart="4dp"
-            app:srcCompat="@drawable/ic_pawprint" />
+            android:padding="1dp"
+            app:srcCompat="@drawable/main_logo" />
 
         <ImageView
             android:id="@+id/small_icon_notificationImv"
@@ -30,29 +27,17 @@
             android:layout_alignBottom="@id/big_icon_notificationImv"
             android:layout_alignEnd="@id/big_icon_notificationImv"
             android:layout_alignRight="@id/big_icon_notificationImv"
-            app:srcCompat="@drawable/ic_info"
-            android:contentDescription="@string/notification_badge_imv_desc" />
+            android:contentDescription="@string/notification_badge_imv_desc"
+            app:srcCompat="@drawable/ic_info_small_notification" />
 
-    </RelativeLayout>
-
-    <LinearLayout
-        android:id="@+id/notification_main"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="false"
-        android:layout_marginTop="3dp"
-        android:layout_toEndOf="@+id/icon_container"
-        android:layout_toRightOf="@+id/icon_container"
-        android:gravity="center_vertical"
-        android:orientation="vertical"
-        android:paddingLeft="6dp"
-        android:paddingStart="6dp"
-        tools:ignore="RtlSymmetry">
 
         <TextView
             android:id="@+id/content_title_notificationTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_toRightOf="@+id/big_icon_notificationImv"
             android:text="@string/notification_title"
             android:textAppearance="@style/TextAppearance.AppCompat.Notification.Title" />
 
@@ -60,21 +45,25 @@
             android:id="@+id/sub_content_title_notificationTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/content_title_notificationTv"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/big_icon_notificationImv"
             android:text="@string/notification_subtext"
             android:textAppearance="@style/TextAppearance.AppCompat.Notification" />
-    </LinearLayout>
 
-    <TextView
-        android:id="@+id/timestamp_notificationTv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:paddingEnd="3dp"
-        android:paddingRight="3dp"
-        android:paddingTop="8dp"
-        android:textAppearance="@style/TextAppearance.AppCompat.Notification.Time"
-        tools:ignore="RtlSymmetry" />
 
-</RelativeLayout>
+        <TextView
+            android:id="@+id/timestamp_notificationTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:paddingEnd="3dp"
+            android:paddingRight="3dp"
+            android:paddingTop="8dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Notification.Time"
+            tools:ignore="RtlSymmetry" />
+
+    </RelativeLayout>
+</LinearLayout>

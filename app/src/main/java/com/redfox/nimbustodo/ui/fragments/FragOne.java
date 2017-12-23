@@ -35,6 +35,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+
 import com.redfox.nimbustodo.R;
 import com.redfox.nimbustodo.data.db.DBMgr;
 import com.redfox.nimbustodo.data.db.DBSchema;
@@ -44,13 +45,14 @@ import com.redfox.nimbustodo.ui.activity.NoteUpdateActivity;
 import com.redfox.nimbustodo.ui.adapters.NoteAdapter;
 import com.redfox.nimbustodo.ui.interfaces.AdapterCallBack;
 import com.redfox.nimbustodo.util.common_util.UtilCommonConstants;
+import com.redfox.nimbustodo.util.common_util.UtilDBOperation;
 import com.redfox.nimbustodo.util.common_util.UtilDialog;
 
 
 public class FragOne extends Fragment implements AdapterCallBack, UtilDialog.AlertDialogListener {
 
     private final static String TAG = FragOne.class.getSimpleName();
-    private static final boolean LOG_DEBUG = false;
+    private static final boolean LOG_DEBUG = true;
     public static final String EXTRA_ANIMAL_IMAGE_TRANSITION_NAME = "image_transition_name";
 
     @BindView(R.id.fragOne_recyclerView)
@@ -254,11 +256,11 @@ public class FragOne extends Fragment implements AdapterCallBack, UtilDialog.Ale
             switch (item.getItemId()) {
                 case R.id.action_mode_delete:
                     utilDialog.showAlertDialog(UtilCommonConstants.DELETE, "",
-                            "Do you want to delete selected note or notes ?", "DELETE", "", "CANCEL", false);
+                            getString(R.string.DELETE_DIALOG_MSG), "DELETE", "", "CANCEL", false);
                     return true;
                 case R.id.action_mode_archive:
                     utilDialog.showAlertDialog(UtilCommonConstants.ARCHIVE, "",
-                            "Do you want to archive selected note or notes ?", "ARCHIVE", "", "CANCEL", false);
+                            getString(R.string.ARCHIEVE_DIALOG_MSG), "ARCHIVE", "", "CANCEL", false);
                     return true;
                 default:
                     return false;
@@ -326,8 +328,15 @@ public class FragOne extends Fragment implements AdapterCallBack, UtilDialog.Ale
         DBMgr dbManager = new DBMgr(v.getContext());
         dbManager.openDataBase();
 
-        Cursor cursor = dbManager.getCursor();
-        cursorData(cursor);
+        Cursor cursor = dbManager.getCursorForArchived("0");
+        noteModelList = UtilDBOperation.extractCommonData(cursor, noteModelList);
+        dbManager.closeDataBase();
+
+
+        if (LOG_DEBUG) {
+            Log.d(TAG, "Loaded data (entry only with isArchived 0) to NoteModel Size : " + noteModelList.size());
+            Log.d(TAG, "Loaded data (entry only with isArchived 0) to NoteModel List : " + noteModelList.toString());
+        }
 
         if (noteModelList.size() == 0) {
             if (LOG_DEBUG) Log.d(TAG, " OOps, list is Empty..");
@@ -336,42 +345,7 @@ public class FragOne extends Fragment implements AdapterCallBack, UtilDialog.Ale
             recyclerView.setAdapter(noteAdapter);
             noteAdapter.notifyDataSetChanged();
         }
-        dbManager.closeDataBase();
 
-    }
-
-
-    private void cursorData(Cursor cursor) {
-        if (cursor != null) {
-            if (cursor.moveToFirst()) {
-                do {
-                    NoteModel noteModel = new NoteModel();
-                    noteModel.set_id(cursor.getInt(cursor.getColumnIndex(DBSchema.DB_ROW_ID)));
-                    noteModel.setTitle(cursor.getString(cursor.getColumnIndex(DBSchema.DB_TITLE)));
-                    noteModel.setImgUriPath(cursor.getInt(cursor.getColumnIndex(DBSchema.DB_IMAGE_PATH)));
-                    noteModel.setSub_text(cursor.getString(cursor.getColumnIndex(DBSchema.DB_SUB_TEXT)));
-                    noteModel.setCreateDate(cursor.getLong(cursor.getColumnIndex(DBSchema.DB_CREATE_DATE)));
-                    noteModel.setUpdateDate(cursor.getLong(cursor.getColumnIndex(DBSchema.DB_UPDATE_DATE)));
-                    noteModel.setScheduleTimeLong(cursor.getLong(cursor.getColumnIndex(DBSchema.DB_SCHEDULED_TIME_LONG)));
-                    noteModel.setScheduledWhenLong(cursor.getLong(cursor.getColumnIndex(DBSchema.DB_SCHEDULED_TIME_WHEN)));
-                    noteModel.setScheduledTitle(cursor.getString(cursor.getColumnIndex(DBSchema.DB_SCHEDULED_TITLE)));
-                    noteModel.setIsAlarmScheduled(cursor.getInt(cursor.getColumnIndex(DBSchema.DB_IS_ALARM_SCHEDULED)));
-                    noteModel.setIsTaskDone(cursor.getInt(cursor.getColumnIndex(DBSchema.DB_IS_TASK_DONE)));
-                    int isArchived = cursor.getInt(cursor.getColumnIndex(DBSchema.DB_IS_ARCHIVED));
-                    noteModel.setIsArchived(isArchived);
-
-                    if (isArchived == 0) {
-                        noteModelList.add(noteModel);
-                    } else {
-                        //intentional..
-                    }
-                    if (LOG_DEBUG)
-                        Log.d(TAG, " : data loaded : list has : " + noteModelList.toString());
-
-                } while (cursor.moveToNext());
-            }
-            cursor.close();
-        }
     }
 
 
@@ -450,8 +424,6 @@ public class FragOne extends Fragment implements AdapterCallBack, UtilDialog.Ale
 
     @Override
     public void onNegBtnClicked() {
-
-
     }
 
     @Override
@@ -489,4 +461,6 @@ public class FragOne extends Fragment implements AdapterCallBack, UtilDialog.Ale
         }
 
     }
+
+
 }

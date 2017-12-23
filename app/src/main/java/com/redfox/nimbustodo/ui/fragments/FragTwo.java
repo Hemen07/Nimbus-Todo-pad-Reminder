@@ -29,10 +29,14 @@ import com.redfox.nimbustodo.data.db.DBMgr;
 import com.redfox.nimbustodo.data.db.DBSchema;
 import com.redfox.nimbustodo.data.model.NoteModel;
 import com.redfox.nimbustodo.data.preferences.common_pref.SPCommonMgr;
+import com.redfox.nimbustodo.job.DbAutoDeleteJob;
+import com.redfox.nimbustodo.ui.activity.NoteUpdateActivity;
 import com.redfox.nimbustodo.ui.adapters.NoteAdapter;
 import com.redfox.nimbustodo.ui.interfaces.AdapterCallBack;
 import com.redfox.nimbustodo.util.common_util.UtilCommonConstants;
+import com.redfox.nimbustodo.util.common_util.UtilDBOperation;
 import com.redfox.nimbustodo.util.common_util.UtilDialog;
+import com.redfox.nimbustodo.util.common_util.UtilExtra;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,6 +67,8 @@ public class FragTwo extends Fragment implements AdapterCallBack, UtilDialog.Ale
     @BindView(R.id.fragTwo_root)
     LinearLayout fragTwoRoot;
     Unbinder unbinder;
+    @BindView(R.id.fragTwo_archive_imv_info)
+    ImageView archiveImvInfo;
 
     private NoteAdapter noteAdapter;
     private List<NoteModel> noteModelList = new ArrayList<>();
@@ -87,7 +93,7 @@ public class FragTwo extends Fragment implements AdapterCallBack, UtilDialog.Ale
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.frag_two, container, false);
+        v = inflater.inflate(R.layout.frag_two, container, false);
         unbinder = ButterKnife.bind(this, v);
         setUpPref();
         setUpDialog();
@@ -199,7 +205,7 @@ public class FragTwo extends Fragment implements AdapterCallBack, UtilDialog.Ale
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             MenuInflater inflater = mode.getMenuInflater();
-            inflater.inflate(R.menu.action_mode_menu_frag_one, menu);
+            inflater.inflate(R.menu.action_mode_menu_frag_two, menu);
             return true;
         }
 
@@ -213,11 +219,11 @@ public class FragTwo extends Fragment implements AdapterCallBack, UtilDialog.Ale
             switch (item.getItemId()) {
                 case R.id.am_fragTwo_restore:
                     utilDialog.showAlertDialog(UtilCommonConstants.RESTORE, "",
-                            "Do you want to restore selected note or notes ?", "RESTORE", "", "CANCEL", false);
+                            getString(R.string.RESTORE_DIALOG_MSG), "RESTORE", "", "CANCEL", false);
                     return true;
                 case R.id.am_fragTwo_delete:
                     utilDialog.showAlertDialog(UtilCommonConstants.DELETE, "",
-                            "Do you want to delete selected note or notes ?", "DELETE", "", "CANCEL", false);
+                            getString(R.string.DELETE_DIALOG_MSG), "DELETE", "", "CANCEL", false);
                     return true;
                 default:
                     return false;
@@ -282,11 +288,16 @@ public class FragTwo extends Fragment implements AdapterCallBack, UtilDialog.Ale
     private void loadData() {
         if (LOG_DEBUG) Log.d(TAG, " inside loadData()..");
         noteModelList.clear();
-        DBMgr dbManager = new DBMgr(v.getContext());
-        dbManager.openDataBase();
+        DBMgr dbMgr = new DBMgr(v.getContext());
+        dbMgr.openDataBase();
+        Cursor cursor = dbMgr.getCursorForArchived("1");
+        noteModelList = UtilDBOperation.extractCommonData(cursor, noteModelList);
+        dbMgr.closeDataBase();
 
-        Cursor cursor = dbManager.getCursor();
-        cursorData(cursor);
+        if (LOG_DEBUG) {
+            Log.d(TAG, "Loaded data (entry only with isArchived 1) to NoteModel Size : " + noteModelList.size());
+            Log.d(TAG, "Loaded data (entry only with isArchived 1) to NoteModel List : " + noteModelList.toString());
+        }
 
         if (noteModelList.size() == 0) {
             if (LOG_DEBUG) Log.d(TAG, " OOps, list is Empty..");
@@ -295,42 +306,7 @@ public class FragTwo extends Fragment implements AdapterCallBack, UtilDialog.Ale
             recyclerView.setAdapter(noteAdapter);
             noteAdapter.notifyDataSetChanged();
         }
-        dbManager.closeDataBase();
 
-    }
-
-
-    private void cursorData(Cursor cursor) {
-        if (cursor != null) {
-            if (cursor.moveToFirst()) {
-                do {
-                    NoteModel noteModel = new NoteModel();
-                    noteModel.set_id(cursor.getInt(cursor.getColumnIndex(DBSchema.DB_ROW_ID)));
-                    noteModel.setTitle(cursor.getString(cursor.getColumnIndex(DBSchema.DB_TITLE)));
-                    noteModel.setImgUriPath(cursor.getInt(cursor.getColumnIndex(DBSchema.DB_IMAGE_PATH)));
-                    noteModel.setSub_text(cursor.getString(cursor.getColumnIndex(DBSchema.DB_SUB_TEXT)));
-                    noteModel.setCreateDate(cursor.getLong(cursor.getColumnIndex(DBSchema.DB_CREATE_DATE)));
-                    noteModel.setUpdateDate(cursor.getLong(cursor.getColumnIndex(DBSchema.DB_UPDATE_DATE)));
-                    noteModel.setScheduleTimeLong(cursor.getLong(cursor.getColumnIndex(DBSchema.DB_SCHEDULED_TIME_LONG)));
-                    noteModel.setScheduledWhenLong(cursor.getLong(cursor.getColumnIndex(DBSchema.DB_SCHEDULED_TIME_WHEN)));
-                    noteModel.setScheduledTitle(cursor.getString(cursor.getColumnIndex(DBSchema.DB_SCHEDULED_TITLE)));
-                    noteModel.setIsAlarmScheduled(cursor.getInt(cursor.getColumnIndex(DBSchema.DB_IS_ALARM_SCHEDULED)));
-                    noteModel.setIsTaskDone(cursor.getInt(cursor.getColumnIndex(DBSchema.DB_IS_TASK_DONE)));
-                    int isArchived = cursor.getInt(cursor.getColumnIndex(DBSchema.DB_IS_ARCHIVED));
-                    noteModel.setIsArchived(isArchived);
-
-                    if (isArchived == 1) {
-                        noteModelList.add(noteModel);
-                    } else {
-                        //intentional..
-                    }
-                    if (LOG_DEBUG)
-                        Log.d(TAG, " : data loaded : list has : " + noteModelList.toString());
-
-                } while (cursor.moveToNext());
-            }
-            cursor.close();
-        }
     }
 
 
@@ -419,7 +395,14 @@ public class FragTwo extends Fragment implements AdapterCallBack, UtilDialog.Ale
 
     @OnClick(R.id.intro_card2_dismiss_btn)
     public void onViewClicked() {
-        fragTwoRoot.setBackgroundColor(ContextCompat.getColor(v.getContext(), R.color.frag_one_bg_color));
+        hideIntroCard(true);
+        fragTwoRoot.setBackgroundColor(ContextCompat.getColor(v.getContext(), R.color.nav_header_bg_color));
+
+    }
+
+    @OnClick(R.id.fragTwo_archive_imv_info)
+    public void onImvInfo() {
+        UtilExtra.dialogArchiveInfo(v.getContext());
 
     }
 }

@@ -1,14 +1,18 @@
 package com.redfox.nimbustodo.util.common_util;
 
+import android.database.Cursor;
 import android.text.TextUtils;
 import android.util.Log;
 
 import com.redfox.nimbustodo.R;
 import com.redfox.nimbustodo.data.db.DBMgr;
+import com.redfox.nimbustodo.data.db.DBSchema;
 import com.redfox.nimbustodo.data.model.NoteModel;
 import com.redfox.nimbustodo.ui.activity.NoteUpdateActivity;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 
 public class UtilDBOperation {
@@ -82,6 +86,39 @@ public class UtilDBOperation {
             dbMgr.closeDataBase();
             return 1;
         }
+    }
+
+
+    //common operation for all,
+    public static List<NoteModel> extractCommonData(Cursor cursor, List<NoteModel> noteModelList) {
+        noteModelList = new ArrayList<>();
+
+        if (LOG_DEBUG) Log.i(TAG, "inside extractCommonData()");
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                do {
+                    NoteModel noteModel = new NoteModel();
+
+                    noteModel.set_id(cursor.getInt(cursor.getColumnIndex(DBSchema.DB_ROW_ID)));
+                    noteModel.setTitle(cursor.getString(cursor.getColumnIndex(DBSchema.DB_TITLE)));
+                    noteModel.setImgUriPath(cursor.getInt(cursor.getColumnIndex(DBSchema.DB_IMAGE_PATH)));
+                    noteModel.setSub_text(cursor.getString(cursor.getColumnIndex(DBSchema.DB_SUB_TEXT)));
+                    noteModel.setCreateDate(cursor.getLong(cursor.getColumnIndex(DBSchema.DB_CREATE_DATE)));
+                    noteModel.setUpdateDate(cursor.getLong(cursor.getColumnIndex(DBSchema.DB_UPDATE_DATE)));
+                    noteModel.setScheduleTimeLong(cursor.getLong(cursor.getColumnIndex(DBSchema.DB_SCHEDULED_TIME_LONG)));
+                    noteModel.setScheduledWhenLong(cursor.getLong(cursor.getColumnIndex(DBSchema.DB_SCHEDULED_TIME_WHEN)));
+                    noteModel.setScheduledTitle(cursor.getString(cursor.getColumnIndex(DBSchema.DB_SCHEDULED_TITLE)));
+                    noteModel.setIsAlarmScheduled(cursor.getInt(cursor.getColumnIndex(DBSchema.DB_IS_ALARM_SCHEDULED)));
+                    noteModel.setIsTaskDone(cursor.getInt(cursor.getColumnIndex(DBSchema.DB_IS_TASK_DONE)));
+                    noteModel.setIsArchived(cursor.getInt(cursor.getColumnIndex(DBSchema.DB_IS_ARCHIVED)));
+                    noteModelList.add(noteModel);
+
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+
+        }
+        return noteModelList;
     }
 
 }

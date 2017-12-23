@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/fragTwo_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/frag_one_bg_color"
+    android:background="@color/nav_header_bg_color"
     android:orientation="vertical">
     <!--#a4447b9c-->
 
@@ -14,6 +15,7 @@
         android:background="#fff"
         android:baselineAligned="false"
         android:orientation="horizontal"
+        android:visibility="gone"
         android:weightSum="1">
 
 
@@ -29,7 +31,16 @@
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:layout_centerInParent="true"
-                android:src="@mipmap/ic_launcher" />
+                android:src="@drawable/main_logo" />
+
+            <ImageView
+                android:id="@+id/intro_card2_small_icon_Imv"
+                android:layout_width="18.2dp"
+                android:layout_height="18.2dp"
+                android:layout_alignBottom="@id/intro_card2_imv"
+                android:layout_alignEnd="@id/intro_card2_imv"
+                android:layout_alignRight="@id/intro_card2_imv"
+                app:srcCompat="@drawable/ic_info_small_notification" />
         </RelativeLayout>
 
 
@@ -75,6 +86,34 @@
 
         </RelativeLayout>
     </LinearLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/fab_sheet_bg">
+
+        <TextView
+            android:id="@+id/fragTwo_tv_archived"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:text="ARCHIVED NOTES"
+            android:textColor="#6555d1"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/fragTwo_archive_imv_info"
+            android:layout_width="60dp"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:padding="5dp"
+
+            app:srcCompat="@drawable/ic_info" />
+    </RelativeLayout>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/fragTwo_recyclerView"

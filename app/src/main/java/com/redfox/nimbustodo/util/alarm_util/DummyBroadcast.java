@@ -16,12 +16,6 @@ import com.redfox.nimbustodo.util.common_util.UtilLogger;
 
 public class DummyBroadcast extends BroadcastReceiver {
 
-    /* PURPOSE :===
-    * Upon clicking Notification Panel or Action :
-    * Updates the DB value and
-    * Redirect the user based on Pending Intent Settings
-     */
-
     private final static String TAG = DummyBroadcast.class.getSimpleName();
     private final static boolean LOG_DEBUG = true;
     private NotificationManager notificationManager;
@@ -168,6 +162,8 @@ public class DummyBroadcast extends BroadcastReceiver {
             }
         }
     }
+
+
 
 
 }

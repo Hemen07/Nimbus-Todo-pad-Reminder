@@ -139,7 +139,6 @@ public class NoteUpdateActivity extends AppCompatActivity implements TagImageCal
     private DBMgr dbMgr;
     private BottomSheetDialog dialogBottom;
     private ImageView bsImvShare;
-    private ImageView bsImvInfo;
     private CircleCheckBox bsCboxMark;
     private Button bsDismissBtn;
     private UtilDialog utilDialog;
@@ -399,7 +398,7 @@ public class NoteUpdateActivity extends AppCompatActivity implements TagImageCal
     }
 
     public void setUpBottomSheetDialog() {
-        View viewBottom = getLayoutInflater().inflate(R.layout.modal_bottomsheet, null);
+        View viewBottom = getLayoutInflater().inflate(R.layout.bottomsheet, null);
 
         dialogBottom = new BottomSheetDialog(this);
         dialogBottom.setContentView(viewBottom);
@@ -408,11 +407,9 @@ public class NoteUpdateActivity extends AppCompatActivity implements TagImageCal
 
 
         bsImvShare = (ImageView) viewBottom.findViewById(R.id.au_bs_imv_share);
-        bsImvInfo = (ImageView) viewBottom.findViewById(R.id.au_bs_imv_info);
         bsCboxMark = (CircleCheckBox) viewBottom.findViewById(R.id.au_bs_cBox_mark);
         bsDismissBtn = (Button) viewBottom.findViewById(R.id.au_bs_btn_cancel);
         bsImvShare.setOnClickListener(this);
-        bsImvInfo.setOnClickListener(this);
         bsDismissBtn.setOnClickListener(this);
 
         bsCboxMark.setListener(new CircleCheckBox.OnCheckedChangeListener() {
@@ -727,9 +724,6 @@ public class NoteUpdateActivity extends AppCompatActivity implements TagImageCal
         switch (id) {
             case R.id.au_bs_imv_share:
                 UtilExtra.shareDataOnClick(NoteUpdateActivity.this, title, etxExtra.getText().toString().trim());
-                break;
-            case R.id.au_bs_imv_info:
-                UtilExtra.dialogArchiveInfo(NoteUpdateActivity.this);
                 break;
             case R.id.au_bs_btn_cancel:
                 if (dialogBottom != null) {

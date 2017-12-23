@@ -3,7 +3,13 @@ package com.redfox.nimbustodo.util.common_util;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Looper;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.inputmethod.InputMethodManager;
@@ -44,6 +50,7 @@ public class UtilExtra {
     }
 
 
+    //fragTwo
     public static void dialogArchiveInfo(Context context) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("Important Info !! ");
@@ -75,5 +82,26 @@ public class UtilExtra {
             imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
         }
     }
+
+    public static void playSound(Context context) {
+        Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        Ringtone r = RingtoneManager.getRingtone(context.getApplicationContext(), notification);
+        r.play();
+
+    }
+
+    public static void doVibrate(Context context) {
+        Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+        if (vibrator != null) {
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                vibrator.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
+
+            } else {
+                vibrator.vibrate(500);
+            }
+        }
+    }
+
 
 }

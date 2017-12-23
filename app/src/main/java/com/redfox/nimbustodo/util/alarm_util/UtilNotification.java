@@ -69,19 +69,17 @@ public class UtilNotification {
 
         notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-
         NOTIFICATION_ID = NOTIFICATION_ID + recordId;
         BTN_REQ_CODE = BTN_REQ_CODE + recordId;
         DISMISS_REQ_CODE = DISMISS_REQ_CODE + recordId;
 
         pickEntryById(context, recordId);
 
-
         RemoteViews expandedView = new RemoteViews(context.getPackageName(), R.layout.custom_expanded_notification);
         expandedView.setTextViewText(R.id.timestamp_notificationTv, "@ " + UtilCal.formatDatePattern4(whenScheduled));
         expandedView.setTextViewText(R.id.cE_noteMsg_tv, noteTitle);
-        expandedView.setImageViewResource(R.id.big_icon_notificationImv, R.drawable.ic_pawprint);
-        expandedView.setImageViewResource(R.id.small_icon_notificationImv, R.drawable.ic_info);
+        expandedView.setImageViewResource(R.id.big_icon_notificationImv, R.drawable.main_logo);
+        expandedView.setImageViewResource(R.id.small_icon_notificationImv, R.drawable.ic_info_small_notification);
         expandedView.setImageViewResource(R.id.cE_bg_imv, imageUriPath);
         expandedView.setImageViewResource(R.id.cE_action_imv, R.drawable.ic_check_notification);
 
@@ -89,16 +87,13 @@ public class UtilNotification {
 
         RemoteViews collapsedView = new RemoteViews(context.getPackageName(), R.layout.custom_collapsed_notification);
         collapsedView.setTextViewText(R.id.timestamp_notificationTv, "@ " + UtilCal.formatDatePattern4(whenScheduled));
-        collapsedView.setImageViewResource(R.id.big_icon_notificationImv, R.drawable.ic_pawprint);
-        collapsedView.setImageViewResource(R.id.small_icon_notificationImv, R.drawable.ic_info);
-
+        collapsedView.setImageViewResource(R.id.big_icon_notificationImv, R.drawable.main_logo);
+        collapsedView.setImageViewResource(R.id.small_icon_notificationImv, R.drawable.ic_info_small_notification);
 
         // action button : intent + pi
         setUpIntentActionBtn(context, noteTitle, whenScheduled, recordId, expandedView);
 
-
         PendingIntent piDismiss = setUpIntentDismissEvent(context, noteTitle, whenScheduled, recordId);
-
 
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) {
             if (LOG_DEBUG) Log.v(TAG, " : version : <=M ");
@@ -107,7 +102,7 @@ public class UtilNotification {
             NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
                     .setContentTitle(context.getString(R.string.notification_title))
                     .setContentText(context.getString(R.string.notification_subtext))
-                    .setSmallIcon(R.drawable.ic_pawprint)
+                    .setSmallIcon(R.drawable.main_logo)
                     .setAutoCancel(true)
                     .setLights(Color.CYAN, 500, 1200)
                     .setPriority(Notification.PRIORITY_MAX)
@@ -127,7 +122,7 @@ public class UtilNotification {
             NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
                     .setContentTitle(context.getString(R.string.notification_title))
                     .setContentText(context.getString(R.string.notification_subtext))
-                    .setSmallIcon(R.drawable.ic_pawprint)
+                    .setSmallIcon(R.drawable.main_logo)
                     .setAutoCancel(true)
                     .setLights(Color.CYAN, 500, 1200)
                     .setPriority(Notification.PRIORITY_MAX)
@@ -153,17 +148,15 @@ public class UtilNotification {
             mChannel.enableVibration(true);
             notificationManager.createNotificationChannel(mChannel);
 
-
             NotificationChannelGroup mGroup = new NotificationChannelGroup(NOTIFICATION_GROUP_ID, NOTIFICATION_GROUP_NAME);
             notificationManager.createNotificationChannelGroup(mGroup);
-
 
             NotificationCompat.Builder builder = new NotificationCompat.Builder
                     (context, NOTIFICATION_CHANNEL_ID)
 
                     .setContentTitle(context.getString(R.string.notification_title))
                     .setContentText(context.getString(R.string.notification_subtext))
-                    .setSmallIcon(R.drawable.ic_pawprint)
+                    .setSmallIcon(R.drawable.main_logo)
                     .setAutoCancel(true)
                     .setDeleteIntent(piDismiss)
                     //.setContentIntent(pIpanel)

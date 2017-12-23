@@ -49,6 +49,9 @@
 
     <string name="add_remainder">Remainder ?</string>
     <string name="add_extra_hint">Add side note..</string>
+    <string name="DELETE_DIALOG_MSG">Do you want to delete selected note or notes Permanently ?</string>
+    <string name="ARCHIEVE_DIALOG_MSG">Do you want to archive selected note or notes ?</string>
+    <string name="RESTORE_DIALOG_MSG">Do you want to restore selected note or notes ?</string>
 
 
 </resources>

@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-
 public class DBMgr {
 
     private final static String TAG = DBMgr.class.getSimpleName();
@@ -130,8 +129,22 @@ public class DBMgr {
                 " WHERE " + DBSchema.DB_ROW_ID + " = " + passedId, null);
     }
 
+    //search/pick : by isArchived
+    public Cursor getCursorForArchived(String isArchived) {
+        if (LOG_DEBUG) Log.w(TAG, " isArchived " + isArchived);
+        return sqLiteDatabase.rawQuery(DBSchema.DB_SELECT_ALL +
+                " WHERE " + DBSchema.DB_IS_ARCHIVED + " = " + isArchived, null);
+    }
+
+    //search/pick : by isArchived
+    public Cursor getCursorForTaskDone(String isTaskDone) {
+        if (LOG_DEBUG) Log.w(TAG, " isTaskDone " + isTaskDone);
+        return sqLiteDatabase.rawQuery(DBSchema.DB_SELECT_ALL +
+                " WHERE " + DBSchema.DB_IS_TASK_DONE + " = " + isTaskDone, null);
+    }
+
     //search/pick  with alarmScheduledStatus
-    public Cursor getCursorSearch2(String passAlarmScheduledStatus) {
+    public Cursor getCursorForAlarmScheduled(String passAlarmScheduledStatus) {
         if (LOG_DEBUG)
             Log.w(TAG, " pick all record with alarmScheduled 1  : " + passAlarmScheduledStatus);
         return sqLiteDatabase.rawQuery(DBSchema.DB_SELECT_ALL +

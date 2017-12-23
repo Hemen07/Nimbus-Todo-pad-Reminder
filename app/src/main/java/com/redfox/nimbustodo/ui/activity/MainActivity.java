@@ -62,6 +62,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.crash.FirebaseCrash;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 import com.google.gson.Gson;
@@ -102,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         , NetworkObserverCallBack, LocationCallBack, DisplayImageCallback, TagImageCallBacks {
 
     private final static String TAG = MainActivity.class.getSimpleName();
-    private static final boolean LOG_DEBUG = true;
+    private static final boolean LOG_DEBUG = false;
 
     private FirebaseRemoteConfig mFirebaseRemoteConfig;
     private final static String VERSION_CODE = "VERSION_CODE";
@@ -185,6 +186,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        FirebaseCrash.setCrashCollectionEnabled(false);
         bsRootBottomLayout.setVisibility(View.INVISIBLE);
         setUpSharedPref();
         setUpToolbar();
@@ -430,15 +432,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
-
         if (id == R.id.fragOne_drawer) {
             if (LOG_DEBUG) Log.e(TAG, "fragOne : tapped()");
-
             doTransaction(FragOne.getInstance(), true);
 
         } else if (id == R.id.fragTwo_drawer) {
-
-            if (LOG_DEBUG) Log.e(TAG, "fragOne : tapped()");
+            if (LOG_DEBUG) Log.e(TAG, "fragTwo : tapped()");
             doTransaction(FragTwo.getInstance(), true);
 
         }
