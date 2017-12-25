@@ -38,7 +38,6 @@ import butterknife.Unbinder;
 
 import com.redfox.nimbustodo.R;
 import com.redfox.nimbustodo.data.db.DBMgr;
-import com.redfox.nimbustodo.data.db.DBSchema;
 import com.redfox.nimbustodo.data.model.NoteModel;
 import com.redfox.nimbustodo.data.preferences.common_pref.SPCommonMgr;
 import com.redfox.nimbustodo.ui.activity.NoteUpdateActivity;
@@ -47,13 +46,16 @@ import com.redfox.nimbustodo.ui.interfaces.AdapterCallBack;
 import com.redfox.nimbustodo.util.common_util.UtilCommonConstants;
 import com.redfox.nimbustodo.util.common_util.UtilDBOperation;
 import com.redfox.nimbustodo.util.common_util.UtilDialog;
+import com.redfox.nimbustodo.util.common_util.UtilExtra;
 
 
 public class FragOne extends Fragment implements AdapterCallBack, UtilDialog.AlertDialogListener {
 
     private final static String TAG = FragOne.class.getSimpleName();
-    private static final boolean LOG_DEBUG = true;
+    private static final boolean LOG_DEBUG = false;
     public static final String EXTRA_ANIMAL_IMAGE_TRANSITION_NAME = "image_transition_name";
+    private final static String INSTALLED_VERSION_CODE = "3";
+
 
     @BindView(R.id.fragOne_recyclerView)
     RecyclerView recyclerView;
@@ -80,10 +82,7 @@ public class FragOne extends Fragment implements AdapterCallBack, UtilDialog.Ale
     private List<NoteModel> multiSelectionList = new ArrayList<>();
     private boolean isMultiSelect = false;
 
-
-    //based on this, data would be loaded : helpful when on backpress (from NU activity) onResume would be called
     private boolean mDataLoaded = false;
-
     private UtilDialog utilDialog;
 
     private SPCommonMgr commonMgr;
@@ -461,6 +460,7 @@ public class FragOne extends Fragment implements AdapterCallBack, UtilDialog.Ale
         }
 
     }
+
 
 
 }

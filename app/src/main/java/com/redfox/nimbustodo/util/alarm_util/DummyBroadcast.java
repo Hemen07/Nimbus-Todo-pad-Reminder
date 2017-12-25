@@ -17,7 +17,7 @@ import com.redfox.nimbustodo.util.common_util.UtilLogger;
 public class DummyBroadcast extends BroadcastReceiver {
 
     private final static String TAG = DummyBroadcast.class.getSimpleName();
-    private final static boolean LOG_DEBUG = true;
+    private final static boolean LOG_DEBUG = false;
     private NotificationManager notificationManager;
     private int NOTIFICATION_ID;
 

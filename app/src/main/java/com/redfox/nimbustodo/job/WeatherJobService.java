@@ -16,7 +16,7 @@ import com.redfox.nimbustodo.weather.model.OpenWeatherModel;
 public class WeatherJobService extends JobService implements NetworkCallbacks {
 
     private final static String TAG = WeatherJobService.class.getSimpleName();
-    private final static boolean LOG_DEBUG = true;
+    private final static boolean LOG_DEBUG = false;
 
     private Thread myWorker = null;
     private SPWeatherMgr spWeatherMgr = null;

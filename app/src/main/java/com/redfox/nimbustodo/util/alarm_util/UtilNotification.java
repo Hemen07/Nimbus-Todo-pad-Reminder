@@ -25,10 +25,10 @@ import com.redfox.nimbustodo.util.common_util.UtilLogger;
 public class UtilNotification {
 
     private final static String TAG = UtilNotification.class.getSimpleName();
-    private final static boolean LOG_DEBUG = true;
+    private final static boolean LOG_DEBUG = false;
 
     private NotificationManager notificationManager;
-    private int NOTIFICATION_ID = 0; //dymaic
+    private int NOTIFICATION_ID = 0;
     private Notification notification;
 
     //    Channel
@@ -57,12 +57,7 @@ public class UtilNotification {
     public static final String DISMISS_ACTION_RECORD_ID = "DISMISS_ACTION_RECORD_ID";
     public static final String DISMISS_ACTION_NOTIFICATION_KEY = "DISMISS_ACTION_NOTIFICATION_KEY";
 
-
     private int imageUriPath;
-
-
-    //Both Notification's action (button and panel tap) will trigger Dummy Broadcast
-    //process data there, clearing alarms and other things
 
     public void createNotification(Context context, String noteTitle, long whenScheduled, int recordId) {
         if (LOG_DEBUG) UtilLogger.logNotification(TAG, noteTitle, whenScheduled, recordId);
@@ -78,7 +73,7 @@ public class UtilNotification {
         RemoteViews expandedView = new RemoteViews(context.getPackageName(), R.layout.custom_expanded_notification);
         expandedView.setTextViewText(R.id.timestamp_notificationTv, "@ " + UtilCal.formatDatePattern4(whenScheduled));
         expandedView.setTextViewText(R.id.cE_noteMsg_tv, noteTitle);
-        expandedView.setImageViewResource(R.id.big_icon_notificationImv, R.drawable.main_logo);
+        expandedView.setImageViewResource(R.id.big_icon_notificationImv, R.drawable.ic_notification);
         expandedView.setImageViewResource(R.id.small_icon_notificationImv, R.drawable.ic_info_small_notification);
         expandedView.setImageViewResource(R.id.cE_bg_imv, imageUriPath);
         expandedView.setImageViewResource(R.id.cE_action_imv, R.drawable.ic_check_notification);
@@ -87,7 +82,7 @@ public class UtilNotification {
 
         RemoteViews collapsedView = new RemoteViews(context.getPackageName(), R.layout.custom_collapsed_notification);
         collapsedView.setTextViewText(R.id.timestamp_notificationTv, "@ " + UtilCal.formatDatePattern4(whenScheduled));
-        collapsedView.setImageViewResource(R.id.big_icon_notificationImv, R.drawable.main_logo);
+        collapsedView.setImageViewResource(R.id.big_icon_notificationImv, R.drawable.ic_notification);
         collapsedView.setImageViewResource(R.id.small_icon_notificationImv, R.drawable.ic_info_small_notification);
 
         // action button : intent + pi
@@ -102,7 +97,7 @@ public class UtilNotification {
             NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
                     .setContentTitle(context.getString(R.string.notification_title))
                     .setContentText(context.getString(R.string.notification_subtext))
-                    .setSmallIcon(R.drawable.main_logo)
+                    .setSmallIcon(R.drawable.ic_notification)
                     .setAutoCancel(true)
                     .setLights(Color.CYAN, 500, 1200)
                     .setPriority(Notification.PRIORITY_MAX)
@@ -122,7 +117,7 @@ public class UtilNotification {
             NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
                     .setContentTitle(context.getString(R.string.notification_title))
                     .setContentText(context.getString(R.string.notification_subtext))
-                    .setSmallIcon(R.drawable.main_logo)
+                    .setSmallIcon(R.drawable.ic_notification)
                     .setAutoCancel(true)
                     .setLights(Color.CYAN, 500, 1200)
                     .setPriority(Notification.PRIORITY_MAX)
@@ -156,7 +151,7 @@ public class UtilNotification {
 
                     .setContentTitle(context.getString(R.string.notification_title))
                     .setContentText(context.getString(R.string.notification_subtext))
-                    .setSmallIcon(R.drawable.main_logo)
+                    .setSmallIcon(R.drawable.ic_notification)
                     .setAutoCancel(true)
                     .setDeleteIntent(piDismiss)
                     //.setContentIntent(pIpanel)
@@ -206,10 +201,9 @@ public class UtilNotification {
     private void pickEntryById(Context context, int recordId) {
         DBMgr dbMgr = new DBMgr(context);
         dbMgr.openDataBase();
-        if (dbMgr != null) {
-            Cursor cursor = dbMgr.getCursorSearch(String.valueOf(recordId));
-            cursorData(cursor);
-        }
+        Cursor cursor = dbMgr.getCursorSearch(String.valueOf(recordId));
+        cursorData(cursor);
+
     }
 
     private void cursorData(Cursor cursor) {

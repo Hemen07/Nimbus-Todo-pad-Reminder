@@ -17,7 +17,7 @@ import com.redfox.nimbustodo.util.common_util.UtilLogger;
 public class UtilAlarmManager {
 
     private final static String TAG = UtilAlarmManager.class.getSimpleName();
-    private final static boolean LOG_DEBUG = true;
+    private final static boolean LOG_DEBUG = false;
     private static int ALARM_PI_REQ_CODE = 0; //dynamic
     private static PendingIntent pIBroadCast;
     private static AlarmManager alarmManager;
@@ -33,7 +33,6 @@ public class UtilAlarmManager {
 
         pIBroadCast = PendingIntent.getBroadcast(context, ALARM_PI_REQ_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         alarmManager = (AlarmManager) context.getApplicationContext().getSystemService(Context.ALARM_SERVICE);
-
 
         //AlarmClock for exact 21+
         if (alarmManager != null) {
@@ -52,7 +51,6 @@ public class UtilAlarmManager {
         }
     }
 
-//Put all these in BG...
     public static void cancelAlarm(Context context, int recordId) {
         if (LOG_DEBUG) Log.e(TAG, " cancelAlarm() : ");
 

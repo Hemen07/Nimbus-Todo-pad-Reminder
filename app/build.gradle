@@ -8,8 +8,8 @@ android {
         applicationId "com.redfox.nimbustodo"
         minSdkVersion 16
         targetSdkVersion 26
-        versionCode 1
-        versionName "1.4"
+        versionCode 4
+        versionName "1.A4"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -38,7 +38,6 @@ dependencies {
     compile 'com.github.douglasjunior:android-simple-tooltip:0.2.1'
     compile 'com.uniquestudio:checkbox:1.0.10'
     compile 'com.google.firebase:firebase-config:11.8.0'
-    compile 'com.google.firebase:firebase-crash:11.8.0'
 
 }
 apply plugin: 'com.google.gms.google-services'

@@ -1,6 +1,5 @@
 package com.redfox.nimbustodo.ui.activity;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -23,6 +22,7 @@ import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -47,7 +47,6 @@ import com.bumptech.glide.GenericTransitionOptions;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.crash.FirebaseCrash;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 import com.google.gson.Gson;
@@ -69,7 +68,6 @@ import com.redfox.nimbustodo.util.common_util.UtilCal;
 import com.redfox.nimbustodo.util.common_util.UtilExtra;
 import com.redfox.nimbustodo.util.common_util.UtilJobs;
 import com.redfox.nimbustodo.util.common_util.UtilSnackBar;
-import com.redfox.nimbustodo.util.common_util.UtilStorage;
 import com.redfox.nimbustodo.util.common_util.UtilTagImage;
 import com.redfox.nimbustodo.weather.DisplayImageCallback;
 import com.redfox.nimbustodo.weather.model.OpenWeatherModel;
@@ -92,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private FirebaseRemoteConfig mFirebaseRemoteConfig;
     private final static String VERSION_CODE = "VERSION_CODE";
-    private final static String INSTALLED_VERSION_NAME = "1.4";
+    private final static String INSTALLED_VERSION_CODE = "4";
 
 
     @BindView(R.id.am_toolbar)
@@ -151,9 +149,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private Dialog dialogTag;
     private int imageUripath;
-    private boolean isLastEntry = false; //to remove entry : based on this value
+    private boolean isLastEntry = false;
 
-    private boolean shouldExit = false;  // exit strategy based on this
+    private boolean shouldExit = false;
 
     private boolean isSignedIn = false;
     private String prefDisplayName;
@@ -162,6 +160,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private SPCommonMgr spCommonMgr;
     private Handler handlerToolTips;
 
+    private String rcvVersion;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -169,10 +169,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        FirebaseCrash.setCrashCollectionEnabled(false);
         bsRootBottomLayout.setVisibility(View.INVISIBLE);
         setUpSharedPref();
         setUpToolbar();
+        updateCheck();
         setUpCollapsingToolBar();
         setUpDrawer();
         setUpNavHeader();
@@ -194,11 +194,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void setUpSharedPref() {
         spWeatherMgr = new SPWeatherMgr(MainActivity.this);
         spCommonMgr = new SPCommonMgr(MainActivity.this);
+        rcvVersion = spCommonMgr.getVersionRemoteConfig();
     }
 
     private void setUpToolbar() {
         toolbar = (Toolbar) findViewById(R.id.am_toolbar);
         setSupportActionBar(toolbar);
+    }
+
+    private void updateCheck() {
+        if (rcvVersion != null) {
+            if (rcvVersion.contentEquals(INSTALLED_VERSION_CODE)) {
+                if (LOG_DEBUG) Log.e(TAG, " NO UPDATE REQUIRED ");
+            } else {
+                if (LOG_DEBUG) Log.e(TAG, " UPDATE REQUIRED ---");
+                UtilExtra.dialogUpdate(MainActivity.this);
+
+            }
+        }
     }
 
     private void setUpCollapsingToolBar() {
@@ -387,7 +400,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
-    //adding transaction to backstack based on boolean, for manipulating onBackpressed
+    //adding transaction to back stack based on boolean, for manipulating onBackpressed
     private void doTransaction(Fragment fragment, boolean addToBackStack) {
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
@@ -547,7 +560,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-
     public void registerReceiver() {
         if (LOG_DEBUG) Log.e(TAG, " registering..");
 
@@ -587,7 +599,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-
     @OnClick(R.id.am_configBtn)
     public void onViewClicked() {
 
@@ -616,7 +627,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             UtilLocationDialog.dismissDialog();
         }
     }
-
 
     private void showWeatherPanel() {
         weatherCityTv.setVisibility(View.VISIBLE);
@@ -723,7 +733,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-
     @Override
     public void imageListener(int drawable) {
         imageUripath = drawable;
@@ -740,6 +749,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @OnClick(R.id.bs_imv_save)
     public void bsSaveImvClicked() {
+
         addEntry();
         imageUripath = 0;
         hideBottomLinear(true);
@@ -794,7 +804,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void loadDefaultSignInData() {
         isSignedIn = false;
-
         String displayName = getString(R.string.profile_default_title);
         navTitle.setText(displayName);
         String email = getString(R.string.profile_default_email);
@@ -805,6 +814,51 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @OnClick(R.id.aa_btn_signOut)
     public void onViewClickedSingOut() {
+    }
+
+    private void initFireBaseConfig() {
+        mFirebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
+        FirebaseRemoteConfigSettings remoteConfigSettings = new FirebaseRemoteConfigSettings.Builder()
+                .setDeveloperModeEnabled(true)
+                .build();
+        mFirebaseRemoteConfig.setConfigSettings(remoteConfigSettings);
+        mFirebaseRemoteConfig.setDefaults(R.xml.remote_config_defaults);
+        long cacheExpiration = 3600;
+
+        if (mFirebaseRemoteConfig.getInfo().getConfigSettings().isDeveloperModeEnabled()) {
+            cacheExpiration = 0;
+        }
+
+        mFirebaseRemoteConfig.fetch(cacheExpiration)
+                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+
+                            if (LOG_DEBUG) Log.e(TAG, "Fetch Succeeded");
+                            mFirebaseRemoteConfig.activateFetched();
+
+                        } else {
+                            if (LOG_DEBUG) Log.e(TAG, "Fetch Failed");
+                        }
+
+                        handlerResultRemoteConfig();
+
+                    }
+                });
+    }
+
+    private void handlerResultRemoteConfig() {
+        String result = mFirebaseRemoteConfig.getString(VERSION_CODE);
+        if (spCommonMgr != null) {
+            spCommonMgr.saveRemoteVersion(result);
+        } else {
+            SPCommonMgr spCommonMgr = new SPCommonMgr(this);
+            spCommonMgr.saveRemoteVersion(result);
+        }
+        if (LOG_DEBUG) Log.e(TAG, " remote  default value  : VERSION_CODE  : " + result);
+
+
     }
 
     @Override
@@ -838,50 +892,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (mReceiver != null) {
             mReceiver.quitHandlerThread();
         }
-    }
-
-    private void initFireBaseConfig() {
-        mFirebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
-        FirebaseRemoteConfigSettings remoteConfigSettings = new FirebaseRemoteConfigSettings.Builder()
-                .setDeveloperModeEnabled(true)
-                .build();
-        mFirebaseRemoteConfig.setConfigSettings(remoteConfigSettings);
-        mFirebaseRemoteConfig.setDefaults(R.xml.remote_config_defaults);
-        long cacheExpiration = 3600;
-
-        if (mFirebaseRemoteConfig.getInfo().getConfigSettings().isDeveloperModeEnabled()) {
-            cacheExpiration = 0;
-        }
-
-        mFirebaseRemoteConfig.fetch(cacheExpiration)
-                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-
-                            if (LOG_DEBUG) Log.e(TAG, "Fetch Succeeded");
-                            mFirebaseRemoteConfig.activateFetched();
-
-                        } else {
-                            if (LOG_DEBUG) Log.e(TAG, "Fetch Failed");
-                        }
-                        displayWelcomeMessage();
-                    }
-                });
-    }
-
-    private void displayWelcomeMessage() {
-        String result = mFirebaseRemoteConfig.getString(VERSION_CODE);
-        if (LOG_DEBUG) Log.e(TAG, " remote value  : VERSION_CODE  : " + result);
-
-        if (result.contentEquals(INSTALLED_VERSION_NAME)) {
-            if (LOG_DEBUG) Log.e(TAG, " NO UPDATE REQUIRED ");
-        } else {
-            if (LOG_DEBUG) Log.e(TAG, " UPDATE REQUIRED ---");
-            UtilExtra.dialogUpdate(MainActivity.this);
-            finish();
-        }
-
     }
 
     @Override

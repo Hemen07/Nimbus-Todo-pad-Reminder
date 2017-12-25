@@ -66,7 +66,7 @@ public class NoteUpdateActivity extends AppCompatActivity implements TagImageCal
         , UtilDialog.AlertDialogListener, DateTimeCallback {
 
     private final static String TAG = NoteUpdateActivity.class.getSimpleName();
-    private final static boolean LOG_DEBUG = true;
+    private final static boolean LOG_DEBUG = false;
 
     @BindView(R.id.appBar)
     AppBarLayout appBar;
@@ -505,7 +505,6 @@ public class NoteUpdateActivity extends AppCompatActivity implements TagImageCal
         if (mCalendar.getTimeInMillis() >= currentTime.getTimeInMillis()) {
             String AM_PM = UtilCal.getAMPM(selectedHour);
 
-
             String hour = UtilCal.getDoubleDigits(UtilCal.format12Hour(selectedHour));
             String minute = UtilCal.getDoubleDigits(selectedMinute);
 
@@ -513,6 +512,8 @@ public class NoteUpdateActivity extends AppCompatActivity implements TagImageCal
 
             if (LOG_DEBUG) Log.v(TAG, " alarmTimeSet : " + alarmTimSet);
             scheduledTimeLong = mCalendar.getTimeInMillis();
+            isAlarmScheduled = 1;
+            alarmSchBoolean = true;
             if (LOG_DEBUG) Log.v(TAG, " alarmTimeSet : long time " + scheduledTimeLong);
             tvAlarm.setText(" notify @ " + alarmTimSet);
             tvAlarm.setTextColor(ContextCompat.getColor(NoteUpdateActivity.this, R.color.color_amber));
@@ -528,11 +529,20 @@ public class NoteUpdateActivity extends AppCompatActivity implements TagImageCal
         }
     }
 
+    @Override
+    public void cancelCallBacks(boolean isDialogCancelled) {
+        alarmSchBoolean = false;
+        isAlarmScheduled = 0;
+
+    }
+
     @OnClick(R.id.au_imv_alarm_cancel)
     public void onImbAlarmCancelClicked() {
 
         if (isAlarmScheduled == 1) {
+            scheduledTimeLong = 0;
             isAlarmScheduled = 0;
+            alarmSchBoolean = false;
             if (LOG_DEBUG) Log.v(TAG, " isAlarmScheduled = 1 : " + isAlarmScheduled);
             UtilAlarmManager.cancelAlarm(NoteUpdateActivity.this, recordPosId);
         } else {
@@ -585,7 +595,7 @@ public class NoteUpdateActivity extends AppCompatActivity implements TagImageCal
         int id = item.getItemId();
         switch (id) {
             case android.R.id.home:
-                onHomeSaveBtnTapped();
+                onSaveTapped();
                 break;
             default:
                 break;
@@ -593,53 +603,20 @@ public class NoteUpdateActivity extends AppCompatActivity implements TagImageCal
         return super.onOptionsItemSelected(item);
     }
 
-    private void onHomeSaveBtnTapped() {
+    private void onSaveTapped() {
         String noteTitle = etxTitle.getText().toString().trim();
         String extraNote = etxExtra.getText().toString().trim();
 
-        if (mCalendar != null) {
-            if (alarmSchBoolean) {
+        if (alarmSchBoolean == true && isAlarmScheduled == 1) {
+            updateEntry(noteTitle, extraNote);
 
-                if (dbMgr != null) {
-                    isAlarmScheduled = 1;
-                    updateEntry(noteTitle, extraNote);
-                }
-                if (title != null)
-                    UtilAlarmManager.scheduleAlarm(
-                            this, noteTitle, scheduledTimeLong, System.currentTimeMillis(), recordPosId);
-
-                finish();
-            } else {
-                if (LOG_DEBUG)
-                    Log.v(TAG, "alarm not scheduled,just updating DB  : " + alarmSchBoolean + " ," + isAlarmScheduled);
-
-                if (dbMgr != null) {
-                    if (isAlarmScheduled == 1) {
-                        //intentional
-                    } else {
-                        isAlarmScheduled = 0;
-                    }
-                    updateEntry(noteTitle, extraNote);
-                }
-                finish();
-            }
-
+            UtilAlarmManager.scheduleAlarm(
+                    this, noteTitle, scheduledTimeLong, System.currentTimeMillis(), recordPosId);
+            finish();
         } else {
-            if (LOG_DEBUG)
-                Log.v(TAG, "VIRGIN, mCal is NULL, user has not set time or cleared time , Just UPDATE DB"
-                        + " ," + isAlarmScheduled);
-
-            if (dbMgr != null) {
-                if (isAlarmScheduled == 1) {
-                    //intentional
-                } else {
-                    isAlarmScheduled = 0;
-                }
-                updateEntry(noteTitle, extraNote);
-            }
+            updateEntry(noteTitle, extraNote);
             finish();
         }
-
     }
 
     private void updateEntry(String noteTitle, String extraNote) {

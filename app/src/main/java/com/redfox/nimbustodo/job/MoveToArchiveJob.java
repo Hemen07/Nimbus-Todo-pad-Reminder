@@ -18,7 +18,7 @@ import java.util.List;
 public class MoveToArchiveJob extends JobService {
 
     private final static String TAG = MoveToArchiveJob.class.getSimpleName();
-    private final static boolean LOG_DEBUG = true;
+    private final static boolean LOG_DEBUG = false;
 
     private Thread myWorker = null;
     private List<NoteModel> noteModelList;

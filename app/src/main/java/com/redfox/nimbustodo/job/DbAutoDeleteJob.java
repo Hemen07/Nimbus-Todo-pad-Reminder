@@ -18,7 +18,7 @@ import java.util.List;
 public class DbAutoDeleteJob extends JobService {
 
     private final static String TAG = DbAutoDeleteJob.class.getSimpleName();
-    private final static boolean LOG_DEBUG = true;
+    private final static boolean LOG_DEBUG = false;
 
     private Thread myWorker = null;
     private List<NoteModel> noteModelList;

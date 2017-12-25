@@ -14,7 +14,7 @@
     <string name="weather_image">weather_icon</string>
     <string name="weather_city">Unknown</string>
     <string name="weather_country">unknown</string>
-    <string name="greetings">Hi, Guest</string>
+    <string name="greetings">Hi, There !</string>
     <string name="greetings_date">Wed, 8th November</string>
     <string name="celsius">" °C"</string>
     <string name="config_weather">"Configure Weather"</string>

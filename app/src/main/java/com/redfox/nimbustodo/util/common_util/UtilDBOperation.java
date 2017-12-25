@@ -18,7 +18,7 @@ import java.util.List;
 public class UtilDBOperation {
 
     private final static boolean LOG_DEBUG = true;
-    private final static String TAG = NoteUpdateActivity.class.getSimpleName();
+    private final static String TAG = UtilDBOperation.class.getSimpleName();
 
     public static int updateEntry(DBMgr dbMgr, int isAlarmScheduled, long scheduledTimeLong, int recordPosId,
                                   String titleNote, int imageUriPath, String noteExtra, long dateCreation,
@@ -62,7 +62,7 @@ public class UtilDBOperation {
         noteModel.setIsTaskDone(isTaskDone);
         noteModel.setIsArchived(isArchived);
 
-        if (LOG_DEBUG) Log.e(TAG, " Before Updation : Notel Model Has " + noteModel);
+        if (LOG_DEBUG) Log.e(TAG, " Before Updation : Note Model Has " + noteModel);
 
         if (isAlarmScheduled == 1) {
             if (LOG_DEBUG) {

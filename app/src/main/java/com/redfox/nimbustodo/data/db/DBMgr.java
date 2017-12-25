@@ -17,7 +17,7 @@ import java.util.List;
 public class DBMgr {
 
     private final static String TAG = DBMgr.class.getSimpleName();
-    private final static boolean LOG_DEBUG = true;
+    private final static boolean LOG_DEBUG = false;
 
     private Context context;
     private DBHelper dbHelper;

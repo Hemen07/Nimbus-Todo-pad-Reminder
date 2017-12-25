@@ -1,5 +1,6 @@
 package com.redfox.nimbustodo.util.common_util;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -17,7 +18,6 @@ import android.widget.Toast;
 
 public class UtilExtra {
     private static final boolean LOG_DEBUG = true;
-
 
     public static void uiCheck(String TAG) {
         if (Looper.myLooper() == Looper.getMainLooper()) {
@@ -103,7 +103,7 @@ public class UtilExtra {
         }
     }
 
-    //fragTwo
+
     public static void dialogUpdate(final Context context) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("Update Available !! ");
@@ -114,11 +114,13 @@ public class UtilExtra {
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
                 context.startActivity(new Intent(Intent.ACTION_VIEW,
-                        Uri.parse("https://play.google.com/store/apps/details?id=com.sivantasoftware.kidstiffin")));
+                        Uri.parse("https://play.google.com/store/apps/details?id=com.redfox.nimbustodo")));
+
+                ((Activity) context).finish();
             }
         });
-
         AlertDialog alertDialog = builder.create();
+
         alertDialog.show();
 
     }

@@ -29,7 +29,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 
 
     private final static String TAG = AlarmReceiver.class.getSimpleName();
-    private final static boolean LOG_DEBUG = true;
+    private final static boolean LOG_DEBUG = false;
 
     private String title;
     private long whenScheduledLong;

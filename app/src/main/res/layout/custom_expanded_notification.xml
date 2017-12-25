@@ -18,7 +18,7 @@
             android:layout_height="50dp"
             android:contentDescription="@string/notification_imv_desc"
             android:padding="1dp"
-            app:srcCompat="@drawable/main_logo" />
+            app:srcCompat="@drawable/ic_notification" />
 
         <ImageView
             android:id="@+id/small_icon_notificationImv"

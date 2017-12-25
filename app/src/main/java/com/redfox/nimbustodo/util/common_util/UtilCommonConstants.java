@@ -33,4 +33,7 @@ public class UtilCommonConstants {
     public final static String INTRO_CARD_2 = "INTRO_CARD_2";
 
 
+    public final static String REMOTE_CONFIG_VALUE = "REMOTE_CONFIG_VALUE";
+
+
 }
