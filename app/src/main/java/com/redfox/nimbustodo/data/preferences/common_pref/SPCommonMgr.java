@@ -97,14 +97,5 @@ public class SPCommonMgr {
         return sharedPreferences.getInt(UtilCommonConstants.INTRO_CARD_2, 0);
     }
 
-    public void saveRemoteVersion(String version) {
-        editor.putString(UtilCommonConstants.REMOTE_CONFIG_VALUE, version);
-        editor.apply();
-    }
-
-    public String getVersionRemoteConfig() {
-        return sharedPreferences.getString(UtilCommonConstants.REMOTE_CONFIG_VALUE, "");
-    }
-
 
 }

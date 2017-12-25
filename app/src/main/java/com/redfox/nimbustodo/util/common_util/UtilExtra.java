@@ -17,7 +17,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 public class UtilExtra {
-    private static final boolean LOG_DEBUG = true;
+    private static final boolean LOG_DEBUG = false;
 
     public static void uiCheck(String TAG) {
         if (Looper.myLooper() == Looper.getMainLooper()) {

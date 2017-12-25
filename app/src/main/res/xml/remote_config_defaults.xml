@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <defaultsMap>
     <entry>
-        <key>VERSION_CODE</key>
-        <value>4</value>
+        <key>VERSION_CODE_KEY</key>
+        <value>5</value>
     </entry>
 </defaultsMap>

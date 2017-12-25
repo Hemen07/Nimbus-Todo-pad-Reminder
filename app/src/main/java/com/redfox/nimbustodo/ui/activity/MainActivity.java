@@ -86,11 +86,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         , NetworkObserverCallBack, LocationCallBack, DisplayImageCallback, TagImageCallBacks {
 
     private final static String TAG = MainActivity.class.getSimpleName();
-    private static final boolean LOG_DEBUG = true;
+    private static final boolean LOG_DEBUG = false;
 
     private FirebaseRemoteConfig mFirebaseRemoteConfig;
-    private final static String VERSION_CODE = "VERSION_CODE";
-    private final static String INSTALLED_VERSION_CODE = "4";
+    private final static String VERSION_CODE_KEY = "VERSION_CODE_KEY";
+    private final static String INSTALLED_VERSION_CODE = "5";
 
 
     @BindView(R.id.am_toolbar)
@@ -160,9 +160,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private SPCommonMgr spCommonMgr;
     private Handler handlerToolTips;
 
-    private String rcvVersion;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         if (LOG_DEBUG) Log.e(TAG, "onCreate()");
@@ -172,7 +169,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         bsRootBottomLayout.setVisibility(View.INVISIBLE);
         setUpSharedPref();
         setUpToolbar();
-        updateCheck();
         setUpCollapsingToolBar();
         setUpDrawer();
         setUpNavHeader();
@@ -194,7 +190,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void setUpSharedPref() {
         spWeatherMgr = new SPWeatherMgr(MainActivity.this);
         spCommonMgr = new SPCommonMgr(MainActivity.this);
-        rcvVersion = spCommonMgr.getVersionRemoteConfig();
     }
 
     private void setUpToolbar() {
@@ -202,17 +197,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setSupportActionBar(toolbar);
     }
 
-    private void updateCheck() {
-        if (rcvVersion != null) {
-            if (rcvVersion.contentEquals(INSTALLED_VERSION_CODE)) {
-                if (LOG_DEBUG) Log.e(TAG, " NO UPDATE REQUIRED ");
-            } else {
-                if (LOG_DEBUG) Log.e(TAG, " UPDATE REQUIRED ---");
-                UtilExtra.dialogUpdate(MainActivity.this);
-
-            }
-        }
-    }
 
     private void setUpCollapsingToolBar() {
 
@@ -823,8 +807,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .build();
         mFirebaseRemoteConfig.setConfigSettings(remoteConfigSettings);
         mFirebaseRemoteConfig.setDefaults(R.xml.remote_config_defaults);
-        long cacheExpiration = 3600;
 
+        fetch();
+
+
+    }
+
+    private void fetch() {
+        String defaultValue = mFirebaseRemoteConfig.getString(VERSION_CODE_KEY);
+        if (LOG_DEBUG) Log.d(TAG, " LOADED DEFAULT DATA " + defaultValue);
+
+        long cacheExpiration = 3600;
         if (mFirebaseRemoteConfig.getInfo().getConfigSettings().isDeveloperModeEnabled()) {
             cacheExpiration = 0;
         }
@@ -834,30 +827,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-
                             if (LOG_DEBUG) Log.e(TAG, "Fetch Succeeded");
                             mFirebaseRemoteConfig.activateFetched();
-
                         } else {
                             if (LOG_DEBUG) Log.e(TAG, "Fetch Failed");
                         }
-
-                        handlerResultRemoteConfig();
-
+                        remoteData();
                     }
                 });
     }
 
-    private void handlerResultRemoteConfig() {
-        String result = mFirebaseRemoteConfig.getString(VERSION_CODE);
-        if (spCommonMgr != null) {
-            spCommonMgr.saveRemoteVersion(result);
-        } else {
-            SPCommonMgr spCommonMgr = new SPCommonMgr(this);
-            spCommonMgr.saveRemoteVersion(result);
-        }
-        if (LOG_DEBUG) Log.e(TAG, " remote  default value  : VERSION_CODE  : " + result);
+    private void remoteData() {
+        String result = mFirebaseRemoteConfig.getString(VERSION_CODE_KEY);
+        if (LOG_DEBUG) Log.e(TAG, " LATEST DATA FETCHED : " + result);
 
+        if (result.contentEquals(INSTALLED_VERSION_CODE)) {
+            if (LOG_DEBUG)
+                Log.e(TAG, " no update required.. " + result + " : " + INSTALLED_VERSION_CODE);
+        } else {
+            if (LOG_DEBUG)
+                Log.e(TAG, " UPDATE AVAILABLE.. " + result + " : " + INSTALLED_VERSION_CODE);
+            UtilExtra.dialogUpdate(this);
+        }
 
     }
 
