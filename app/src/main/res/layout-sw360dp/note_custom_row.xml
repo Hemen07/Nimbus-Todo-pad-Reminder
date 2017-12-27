@@ -27,14 +27,14 @@
 
         <TextView
             android:id="@+id/note_row_tv_title"
-            android:layout_width="wrap_content"
+            android:layout_width="280dp"
+            android:paddingLeft="15dp"
+            android:paddingStart="15dp"
             android:layout_height="match_parent"
             android:layout_toEndOf="@+id/note_row_Imv_tag"
             android:layout_toRightOf="@+id/note_row_Imv_tag"
             android:ellipsize="end"
             android:maxLines="1"
-            android:paddingLeft="20dp"
-            android:paddingStart="20dp"
             android:paddingTop="3dp"
             android:text="That was a dick move yeah we know rha"
             android:textColor="#ffb710"

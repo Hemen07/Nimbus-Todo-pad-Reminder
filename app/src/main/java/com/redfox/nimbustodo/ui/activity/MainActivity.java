@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private FirebaseRemoteConfig mFirebaseRemoteConfig;
     private final static String VERSION_CODE_KEY = "VERSION_CODE_KEY";
-    private final static String INSTALLED_VERSION_CODE = "5";
+    private final static String INSTALLED_VERSION_CODE = "6";
 
 
     @BindView(R.id.am_toolbar)
