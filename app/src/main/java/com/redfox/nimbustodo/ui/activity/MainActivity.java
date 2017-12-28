@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private FirebaseRemoteConfig mFirebaseRemoteConfig;
     private final static String VERSION_CODE_KEY = "VERSION_CODE_KEY";
-    private final static String INSTALLED_VERSION_CODE = "6";
+    private final static String INSTALLED_VERSION_CODE = "7";
 
 
     @BindView(R.id.am_toolbar)
@@ -176,6 +176,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setUpBackStackListener();
         setUpReceiver();
         setUpConfigureButton();
+        setUpJobs();
         setUpHomeTransaction();
         isFabShowing = true;
         showFab();
@@ -318,10 +319,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    private void setUpPeriodicJob() {
+    private void setUpJobs() {
         if (LOG_DEBUG) Log.e(TAG, " setUpJobs()");
 
-        UtilJobs.setUpPeriodicJob(this);
         UtilJobs.setUpAutoDeleteJob(this);
         UtilJobs.setUpMoveToArchiveJob(this);
     }
@@ -460,7 +460,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         if (LOG_DEBUG)
                             Log.e(TAG, " scheduling, city name check :- " + spWeatherMgr.getPrefCity());
 
-                        setUpPeriodicJob();
+                        UtilJobs.setUpWeatherJob(this);
                     }
                     btnConfig.setVisibility(View.GONE);
                     spWeatherMgr.saveStatusForConfigureBtn(1);

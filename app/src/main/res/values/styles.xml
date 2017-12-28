@@ -315,7 +315,7 @@
 
     <!--Textview-->
     <style name="CN_Linear2_tv_style">
-        <item name="android:text">@string/add_remainder</item>
+        <item name="android:text">@string/add_reminder</item>
         <item name="android:textColor">@color/color_white</item>
         <item name="android:textSize">14sp</item>
         <item name="android:textStyle">normal</item>

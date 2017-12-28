@@ -13,15 +13,15 @@ import com.firebase.jobdispatcher.Trigger;
 import com.redfox.nimbustodo.job.DbAutoDeleteJob;
 import com.redfox.nimbustodo.job.MoveToArchiveJob;
 import com.redfox.nimbustodo.job.WeatherJobService;
-import com.redfox.nimbustodo.ui.activity.MainActivity;
 
-/**
- * Created by notTdar on 12/23/2017.
- */
 
 public class UtilJobs {
 
-    public static void setUpPeriodicJob(Context context) {
+    private final static String TAG = UtilJobs.class.getSimpleName();
+    private final static boolean LOG_DEBUG = false;
+
+    public static void setUpWeatherJob(Context context) {
+        if (LOG_DEBUG) Log.e(TAG, "---------setUpWeatherJob----");
         FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(context));
 
         Job myJob = dispatcher.newJobBuilder()
@@ -38,6 +38,8 @@ public class UtilJobs {
     }
 
     public static void setUpAutoDeleteJob(Context context) {
+        if (LOG_DEBUG) Log.e(TAG, "---------setUpAutoDeleteJob----");
+
         FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(context));
 
         Job myJob = dispatcher.newJobBuilder()
@@ -46,14 +48,16 @@ public class UtilJobs {
                 .setRecurring(true)
                 .setLifetime(Lifetime.FOREVER)
                 .setRetryStrategy(RetryStrategy.DEFAULT_EXPONENTIAL)
-                .setTrigger(Trigger.executionWindow(16 * 60 * 60, 24 * 60 * 60))
-                .addConstraint(Constraint.DEVICE_CHARGING | Constraint.ON_ANY_NETWORK)
+                .setTrigger(Trigger.executionWindow(30 * 60 * 60, 32 * 60 * 60))
+                .addConstraint(Constraint.DEVICE_CHARGING)
                 .build();
 
         dispatcher.mustSchedule(myJob);
     }
 
     public static void setUpMoveToArchiveJob(Context context) {
+        if (LOG_DEBUG) Log.e(TAG, "---------setUpMoveToArchiveJob----");
+
         FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(context));
 
         Job myJob = dispatcher.newJobBuilder()
@@ -62,8 +66,8 @@ public class UtilJobs {
                 .setRecurring(true)
                 .setLifetime(Lifetime.FOREVER)
                 .setRetryStrategy(RetryStrategy.DEFAULT_EXPONENTIAL)
-                .setTrigger(Trigger.executionWindow(2 * 60 * 60, 3 * 60 * 60))
-                .addConstraint(Constraint.ON_ANY_NETWORK | Constraint.DEVICE_CHARGING)
+                .setTrigger(Trigger.executionWindow(7 * 60 * 60, 9 * 60 * 60))
+                .addConstraint(Constraint.DEVICE_CHARGING)
                 .build();
 
         dispatcher.mustSchedule(myJob);

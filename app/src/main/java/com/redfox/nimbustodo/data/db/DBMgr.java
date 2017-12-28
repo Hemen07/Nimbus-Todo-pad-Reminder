@@ -10,10 +10,6 @@ import android.util.Log;
 import com.redfox.nimbustodo.data.model.NoteModel;
 import com.redfox.nimbustodo.util.common_util.UtilLogger;
 
-import java.util.ArrayList;
-import java.util.List;
-
-
 public class DBMgr {
 
     private final static String TAG = DBMgr.class.getSimpleName();
@@ -22,7 +18,6 @@ public class DBMgr {
     private Context context;
     private DBHelper dbHelper;
     private SQLiteDatabase sqLiteDatabase;
-    private List<NoteModel> noteModelList = new ArrayList<>();
 
     public DBMgr(Context context) {
         this.context = context;

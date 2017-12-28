@@ -11,12 +11,13 @@ import com.redfox.nimbustodo.data.preferences.weather_pref.SPWeatherMgr;
 import com.redfox.nimbustodo.network.NetworkAsync;
 import com.redfox.nimbustodo.network.NetworkCallbacks;
 import com.redfox.nimbustodo.weather.model.OpenWeatherModel;
+import com.redfox.nimbustodo.weather.weather_util.UtilNetworkDetect;
 
 
 public class WeatherJobService extends JobService implements NetworkCallbacks {
 
     private final static String TAG = WeatherJobService.class.getSimpleName();
-    private final static boolean LOG_DEBUG = false;
+    private final static boolean LOG_DEBUG = true;
 
     private Thread myWorker = null;
     private SPWeatherMgr spWeatherMgr = null;
@@ -46,7 +47,13 @@ public class WeatherJobService extends JobService implements NetworkCallbacks {
             @Override
             public void run() {
 
-                new NetworkAsync(WeatherJobService.this, WeatherJobService.this, location).execute();
+                if (UtilNetworkDetect.isOnline(WeatherJobService.this) == true) {
+                    System.out.println("Net there............ fetch weather yo!");
+                    new NetworkAsync(WeatherJobService.this, WeatherJobService.this, location).execute();
+                } else {
+
+                    System.out.println("NO net xxxx, finishing jobs");
+                }
                 jobFinished(parameters, false);
                 if (LOG_DEBUG) Log.v(TAG, " jobFinished() called");
             }

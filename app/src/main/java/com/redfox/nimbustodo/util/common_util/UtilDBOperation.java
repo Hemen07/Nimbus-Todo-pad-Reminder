@@ -17,7 +17,7 @@ import java.util.List;
 
 public class UtilDBOperation {
 
-    private final static boolean LOG_DEBUG = true;
+    private final static boolean LOG_DEBUG = false;
     private final static String TAG = UtilDBOperation.class.getSimpleName();
 
     public static int updateEntry(DBMgr dbMgr, int isAlarmScheduled, long scheduledTimeLong, int recordPosId,

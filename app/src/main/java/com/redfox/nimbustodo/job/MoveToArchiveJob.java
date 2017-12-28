@@ -18,7 +18,7 @@ import java.util.List;
 public class MoveToArchiveJob extends JobService {
 
     private final static String TAG = MoveToArchiveJob.class.getSimpleName();
-    private final static boolean LOG_DEBUG = false;
+    private final static boolean LOG_DEBUG = true;
 
     private Thread myWorker = null;
     private List<NoteModel> noteModelList;
@@ -56,6 +56,12 @@ public class MoveToArchiveJob extends JobService {
 
                 for (int i = 0; i < noteModelList.size(); i++) {
                     noteModel = noteModelList.get(i);
+                    int isTaskDone = noteModel.getIsTaskDone();
+                    if (isTaskDone == 1) {
+                        noteModel.setIsArchived(1);
+                    } else {
+                        noteModel.setIsArchived(0);
+                    }
                     long status = dbMgr.updateNote(noteModel);
                     if (LOG_DEBUG) Log.d(TAG, " update status : " + status);
 

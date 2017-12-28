@@ -550,7 +550,7 @@ public class NoteUpdateActivity extends AppCompatActivity implements TagImageCal
         }
         scheduledTimeLong = 0;
         alarmSchBoolean = false;
-        tvAlarm.setText(getString(R.string.add_remainder));
+        tvAlarm.setText(getString(R.string.add_reminder));
         tvDueDate.setVisibility(View.GONE);
         imvDueDate.setVisibility(View.GONE);
         if (mCalendar != null && mCalendar.getTime() != null) {

@@ -14,7 +14,7 @@
     <string name="weather_image">weather_icon</string>
     <string name="weather_city">Unknown</string>
     <string name="weather_country">unknown</string>
-    <string name="greetings">Hi, There !</string>
+    <string name="greetings">Hi,</string>
     <string name="greetings_date">Wed, 8th November</string>
     <string name="celsius">" °C"</string>
     <string name="config_weather">"Configure Weather"</string>
@@ -25,29 +25,29 @@
     <string name="hint_text_location">@string/only_major_cities</string>
 
     <string name="enter_city_name">enter city name</string>
-    <string name="only_major_cities"> * only major cities</string>
+    <string name="only_major_cities"> * only major cities (OpenWeather)</string>
     <string name="title_activity_note_update">NoteUpdateActivity</string>
     <string name="activity_update_menu_share">share</string>
 
 
-    <string name="notification_title">Hey, Time is UP..</string>
+    <string name="notification_title">Hey, Time is up..</string>
     <string name="notification_subtext">expand and take necessary action</string>
     <string name="lp_imv_desc">lp_imv_desc</string>
     <string name="au_alarm_imv_desc">au_alarm_imv_desc</string>
     <string name="au_alarm_cancel_imb_desc">au_alarm_cancel_imb_desc</string>
     <string name="au_imv_edit_desc">au_imv_edit_desc</string>
-    <string name="au_extra_imv_desc">au_extra)imv_desc</string>
+    <string name="au_extra_imv_desc">au_extra_imv_desc</string>
     <string name="notification_imv_desc">notification_imv_desc</string>
     <string name="notification_badge_imv_desc">notification_badge_imv_desc</string>
     <string name="notification_big_image_desc">notification_big_image_desc</string>
     <string name="notification_action_imv_desc">notification_action_imv_desc</string>
 
     <string name="profile_transition">profile_transition_name</string>
-    <string name="profile_default_title"> Hi, How are you !</string>
+    <string name="profile_default_title"> </string>
     <string name="profile_default_email" />
 
 
-    <string name="add_remainder">Remainder ?</string>
+    <string name="add_reminder">Reminder ?</string>
     <string name="add_extra_hint">Add side note..</string>
     <string name="DELETE_DIALOG_MSG">Do you want to delete selected note or notes Permanently ?</string>
     <string name="ARCHIEVE_DIALOG_MSG">Do you want to archive selected note or notes ?</string>

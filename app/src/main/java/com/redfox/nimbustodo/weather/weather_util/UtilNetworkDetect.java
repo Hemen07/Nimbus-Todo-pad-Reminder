@@ -12,7 +12,7 @@ public class UtilNetworkDetect {
 
 
     public static boolean isOnline(Context context) {
-        boolean isNetTHere = false;
+        boolean isNetTHere = true;
 
         try {
             ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
