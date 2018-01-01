@@ -1,7 +1,9 @@
 # README #
 
-This README would normally document whatever steps are necessary to get your application up and running.
+Nothing to dead here , just pull
 
+A play store demo : https://play.google.com/store/apps/details?id=com.redfox.nimbustodo
+ 
 ### What is this repository for? ###
 
 * A TODO with Remainder and many more useful features
@@ -10,13 +12,7 @@ This README would normally document whatever steps are necessary to get your app
 
 * Just pull,duh !
 
-### Contribution guidelines ###
-
-* Writing tests
-* Code review
-* Other guidelines
 
 ### Who do I talk to? ###
 
-* Repo owner or admin
-* Other community or team contact
+* ME
