@@ -48,7 +48,7 @@ public class UtilJobs {
                 .setRecurring(true)
                 .setLifetime(Lifetime.FOREVER)
                 .setRetryStrategy(RetryStrategy.DEFAULT_EXPONENTIAL)
-                .setTrigger(Trigger.executionWindow(30 * 60 * 60, 32 * 60 * 60))
+                .setTrigger(Trigger.executionWindow(54 * 60 * 60, 62 * 60 * 60))
                 .addConstraint(Constraint.DEVICE_CHARGING)
                 .build();
 
