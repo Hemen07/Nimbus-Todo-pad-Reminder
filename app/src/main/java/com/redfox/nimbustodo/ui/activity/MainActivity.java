@@ -52,7 +52,7 @@ import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.redfox.nimbustodo.R;
-import com.redfox.nimbustodo.data.db.DBMgr;
+import com.redfox.nimbustodo.data.db.DBHelperSingleton;
 import com.redfox.nimbustodo.data.model.NoteModel;
 import com.redfox.nimbustodo.data.preferences.common_pref.SPCommonMgr;
 import com.redfox.nimbustodo.data.preferences.weather_pref.SPWeatherMgr;
@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private FirebaseRemoteConfig mFirebaseRemoteConfig;
     private final static String VERSION_CODE_KEY = "VERSION_CODE_KEY";
-    private final static String INSTALLED_VERSION_CODE = "7";
+    private final static String INSTALLED_VERSION_CODE = "8";
 
 
     @BindView(R.id.am_toolbar)
@@ -167,6 +167,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         bsRootBottomLayout.setVisibility(View.INVISIBLE);
+        setUpDB();
         setUpSharedPref();
         setUpToolbar();
         setUpCollapsingToolBar();
@@ -186,6 +187,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             getWindow().setStatusBarColor(ContextCompat.getColor(this, android.R.color.transparent));
         }
 
+    }
+
+    private void setUpDB() {
+        DBHelperSingleton.getDbInstance(this);
     }
 
     private void setUpSharedPref() {
@@ -767,22 +772,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         noteModel.setIsArchived(0);
 
         if (noteTitle.length() < 0 | noteTitle.isEmpty()) {
-            Toast.makeText(this, "Empty Note can't be saved !", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.emty_note_add_warning_msg, Toast.LENGTH_SHORT).show();
 
         } else {
 
-            DBMgr dbManager = new DBMgr(MainActivity.this);
-            dbManager.openDataBase();
-
-            boolean saveStatus = dbManager.insertNote(noteModel);
+            boolean saveStatus = DBHelperSingleton.getDbInstance(this).insertNote(noteModel);
             if (saveStatus == true) {
-                UtilExtra.showToast(this, "Added...");
+                UtilExtra.showToast(this, getString(R.string.add_entry_msg));
             } else {
                 bsEtx.setFocusable(true);
-                bsEtx.setError("something bad happened !!");
+                bsEtx.setError(getString(R.string.add_entry_failed_msg));
             }
-            dbManager.closeDataBase();
-
         }
     }
 
@@ -883,6 +883,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (mReceiver != null) {
             mReceiver.quitHandlerThread();
         }
+        DBHelperSingleton.getDbInstance(this).closeDB();
     }
 
     @Override

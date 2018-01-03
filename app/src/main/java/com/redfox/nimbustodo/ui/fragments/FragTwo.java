@@ -26,12 +26,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.redfox.nimbustodo.R;
-import com.redfox.nimbustodo.data.db.DBMgr;
-import com.redfox.nimbustodo.data.db.DBSchema;
+import com.redfox.nimbustodo.data.db.DBHelperSingleton;
 import com.redfox.nimbustodo.data.model.NoteModel;
 import com.redfox.nimbustodo.data.preferences.common_pref.SPCommonMgr;
-import com.redfox.nimbustodo.job.DbAutoDeleteJob;
-import com.redfox.nimbustodo.ui.activity.NoteUpdateActivity;
 import com.redfox.nimbustodo.ui.adapters.NoteAdapter;
 import com.redfox.nimbustodo.ui.interfaces.AdapterCallBack;
 import com.redfox.nimbustodo.util.common_util.UtilCommonConstants;
@@ -150,7 +147,6 @@ public class FragTwo extends Fragment implements AdapterCallBack, UtilDialog.Ale
         recyclerView.setAdapter(noteAdapter);
     }
 
-
     @Override
     public void onRowClick(int position, View view, ImageView sharedImv) {
         if (LOG_DEBUG) Log.d(TAG, " ROW clicked at : " + position);
@@ -163,8 +159,6 @@ public class FragTwo extends Fragment implements AdapterCallBack, UtilDialog.Ale
             if (alertDialog != null) {
                 alertDialog.show();
             }
-
-
         }
     }
 
@@ -180,11 +174,8 @@ public class FragTwo extends Fragment implements AdapterCallBack, UtilDialog.Ale
                 mActionMode = getActivity().startActionMode(mActionModeCallback);
             }
         }
-
         multi_select(position);
-
     }
-
 
     private void multi_select(int position) {
         if (mActionMode != null) {
@@ -194,9 +185,7 @@ public class FragTwo extends Fragment implements AdapterCallBack, UtilDialog.Ale
 
             } else {
                 multiSelectionList.add(noteModelList.get(position));
-
             }
-
             if (multiSelectionList.size() > 0) {
                 mActionMode.setTitle("" + multiSelectionList.size());
 
@@ -258,7 +247,6 @@ public class FragTwo extends Fragment implements AdapterCallBack, UtilDialog.Ale
         noteAdapter.notifyDataSetChanged();
     }
 
-
     @Override
     public void onResume() {
         super.onResume();
@@ -274,7 +262,6 @@ public class FragTwo extends Fragment implements AdapterCallBack, UtilDialog.Ale
     public void onPause() {
         super.onPause();
         if (LOG_DEBUG) Log.d(TAG, "onPause()");
-
     }
 
     @Override
@@ -285,9 +272,7 @@ public class FragTwo extends Fragment implements AdapterCallBack, UtilDialog.Ale
         if (handlerIntroCard != null) {
             handlerIntroCard.removeCallbacks(null);
         }
-
     }
-
 
     @Override
     public void onDestroyView() {
@@ -300,15 +285,12 @@ public class FragTwo extends Fragment implements AdapterCallBack, UtilDialog.Ale
         }
     }
 
-
     private void loadData() {
         if (LOG_DEBUG) Log.d(TAG, " inside loadData()..");
         noteModelList.clear();
-        DBMgr dbMgr = new DBMgr(v.getContext());
-        dbMgr.openDataBase();
-        Cursor cursor = dbMgr.getCursorForArchived("1");
+
+        Cursor cursor = DBHelperSingleton.getDbInstance(v.getContext()).getCursorForArchived("1");
         noteModelList = UtilDBOperation.extractCommonData(cursor, noteModelList);
-        dbMgr.closeDataBase();
 
         if (LOG_DEBUG) {
             Log.d(TAG, "Loaded data (entry only with isArchived 1) to NoteModel Size : " + noteModelList.size());
@@ -325,13 +307,9 @@ public class FragTwo extends Fragment implements AdapterCallBack, UtilDialog.Ale
 
     }
 
-
     @Override
     public void onPosBtnClicked(String whichOperation) {
         if (multiSelectionList.size() > 0) {
-
-            DBMgr dbManager = new DBMgr(v.getContext());
-            dbManager.openDataBase();
             NoteModel noteModel;
 
             if (whichOperation.contentEquals(UtilCommonConstants.RESTORE)) {
@@ -344,8 +322,7 @@ public class FragTwo extends Fragment implements AdapterCallBack, UtilDialog.Ale
                     } else {
                         noteModel.setIsArchived(isArchived);
                     }
-
-                    long status = dbManager.updateNote(noteModel);
+                    long status = DBHelperSingleton.getDbInstance(v.getContext()).updateNote(noteModel);
                     if (LOG_DEBUG) {
                         Log.w(TAG, "update status : " + status);
                         Log.v(TAG, "removing item from list : " + multiSelectionList.get(i));
@@ -353,16 +330,14 @@ public class FragTwo extends Fragment implements AdapterCallBack, UtilDialog.Ale
                     noteModelList.remove(multiSelectionList.get(i));
                 }
 
-                dbManager.closeDataBase();
                 multiSelectionList.clear();
-
                 noteAdapter.notifyDataSetChanged();
 
             } else if (whichOperation.contentEquals(UtilCommonConstants.DELETE)) {
 
                 for (int i = 0; i < multiSelectionList.size(); i++) {
                     int _id = multiSelectionList.get(i).get_id();
-                    int status = dbManager.deleteNote(_id);
+                    int status = DBHelperSingleton.getDbInstance(v.getContext()).deleteNote(_id);
                     noteModelList.remove(multiSelectionList.get(i));
 
                 }
@@ -378,7 +353,6 @@ public class FragTwo extends Fragment implements AdapterCallBack, UtilDialog.Ale
     @Override
     public void onNegBtnClicked() {
 
-
     }
 
     @Override
@@ -386,7 +360,6 @@ public class FragTwo extends Fragment implements AdapterCallBack, UtilDialog.Ale
         if (mActionMode != null) {
             mActionMode.finish();
         }
-
     }
 
 
@@ -394,26 +367,28 @@ public class FragTwo extends Fragment implements AdapterCallBack, UtilDialog.Ale
         Animation slideLeft = AnimationUtils.loadAnimation(v.getContext(), R.anim.slide_left_complete);
         iC_2rootLinear.setAnimation(slideLeft);
         iC_2rootLinear.setVisibility(View.VISIBLE);
-
     }
 
     private void hideIntroCard(boolean withAnimation) {
         if (withAnimation == true) {
             Animation slideRight = AnimationUtils.loadAnimation(v.getContext(), R.anim.slide_right_complete);
             iC_2rootLinear.setAnimation(slideRight);
-            iC_2rootLinear.setVisibility(View.GONE);
+            handlerIntroCard.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    iC_2rootLinear.setVisibility(View.GONE);
+                }
+            }, 400);
         } else {
             iC_2rootLinear.setVisibility(View.GONE);
 
         }
-
     }
 
     @OnClick(R.id.intro_card2_dismiss_btn)
     public void onViewClicked() {
         hideIntroCard(true);
         fragTwoRoot.setBackgroundColor(ContextCompat.getColor(v.getContext(), R.color.nav_header_bg_color));
-
     }
 
     @OnClick(R.id.fragTwo_archive_imv_info)
@@ -423,9 +398,7 @@ public class FragTwo extends Fragment implements AdapterCallBack, UtilDialog.Ale
     }
 
     private void setUpArchiveDialog() {
-
         final AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
-
         LayoutInflater layoutInflater = LayoutInflater.from(v.getContext());
         final View customView = layoutInflater.inflate(R.layout.archive_dialog, null);
         builder.setView(customView);
@@ -441,7 +414,5 @@ public class FragTwo extends Fragment implements AdapterCallBack, UtilDialog.Ale
                 alertDialog.dismiss();
             }
         });
-
-
     }
 }

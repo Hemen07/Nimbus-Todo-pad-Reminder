@@ -1,14 +1,14 @@
 package com.redfox.nimbustodo.util.common_util;
 
+import android.content.Context;
 import android.database.Cursor;
 import android.text.TextUtils;
 import android.util.Log;
 
 import com.redfox.nimbustodo.R;
-import com.redfox.nimbustodo.data.db.DBMgr;
+import com.redfox.nimbustodo.data.db.DBHelperSingleton;
 import com.redfox.nimbustodo.data.db.DBSchema;
 import com.redfox.nimbustodo.data.model.NoteModel;
-import com.redfox.nimbustodo.ui.activity.NoteUpdateActivity;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -20,7 +20,7 @@ public class UtilDBOperation {
     private final static boolean LOG_DEBUG = false;
     private final static String TAG = UtilDBOperation.class.getSimpleName();
 
-    public static int updateEntry(DBMgr dbMgr, int isAlarmScheduled, long scheduledTimeLong, int recordPosId,
+    public static int updateEntry(Context context, int isAlarmScheduled, long scheduledTimeLong, int recordPosId,
                                   String titleNote, int imageUriPath, String noteExtra, long dateCreation,
                                   int isTaskDone, int isArchived, String alarmTimSet) {
         if (LOG_DEBUG)
@@ -72,18 +72,15 @@ public class UtilDBOperation {
         }
 
         if (noteTitle.length() < 1 | noteTitle.isEmpty()) {
-            dbMgr.closeDataBase();
             return 0;
-            //   etxTitle.setError("Can't left Empty..");
         } else {
 
-            long updateNote = dbMgr.updateNote(noteModel);
+            long updateNote = DBHelperSingleton.getDbInstance(context).updateNote(noteModel);
             if (updateNote == 1) {
                 if (LOG_DEBUG) Log.v(TAG, " Updated..." + updateNote);
             } else {
                 if (LOG_DEBUG) Log.v(TAG, " Unusual Happened..");
             }
-            dbMgr.closeDataBase();
             return 1;
         }
     }

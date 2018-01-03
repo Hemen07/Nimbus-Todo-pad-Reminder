@@ -5,45 +5,86 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.redfox.nimbustodo.data.model.NoteModel;
 import com.redfox.nimbustodo.util.common_util.UtilLogger;
 
-public class DBMgr {
 
-    private final static String TAG = DBMgr.class.getSimpleName();
+public class DBHelperSingleton extends SQLiteOpenHelper {
+
+    private final static String TAG = DBHelperSingleton.class.getSimpleName();
     private final static boolean LOG_DEBUG = false;
 
-    private Context context;
-    private DBHelper dbHelper;
-    private SQLiteDatabase sqLiteDatabase;
 
-    public DBMgr(Context context) {
-        this.context = context;
-        this.dbHelper = new DBHelper(context);
+    private static DBHelperSingleton mDBDbHelperInstance;
+    private static SQLiteDatabase mSqLiteDatabase;
+
+    public static DBHelperSingleton getDbInstance(Context context) {
+        Log.i(TAG, " getDbInstance()");
+
+        if (mDBDbHelperInstance == null) {
+            Log.e(TAG, " mDBDbHelperInstance == NULL : initialize it");
+            mDBDbHelperInstance = new DBHelperSingleton(context.getApplicationContext());
+            openDB();
+        } else {
+            //intentional
+            Log.e(TAG, " mDBDbHelperInstance != NOT NULL : return existing one ");
+
+        }
+        return mDBDbHelperInstance;
     }
 
+    private DBHelperSingleton(Context context) {
+        super(context, DBSchema.DB_NAME, null, DBSchema.DB_VERSION);
+    }
 
-    public DBMgr openDataBase() {
-        if (LOG_DEBUG) Log.w(TAG, "openDataBase()");
+    @Override
+    public void onCreate(SQLiteDatabase sqLiteDatabase) {
         try {
-            sqLiteDatabase = dbHelper.getWritableDatabase();
-        } catch (SQLException e) {
+            sqLiteDatabase.execSQL(DBSchema.DB_STATEMENT);
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        return this;
     }
 
-    public void closeDataBase() {
-        if (LOG_DEBUG) Log.w(TAG, "closeDataBase()");
-        try {
-            dbHelper.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
+    @Override
+    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
+        sqLiteDatabase.execSQL(" DROP TABLE IF EXISTS " + DBSchema.DB_TABLE_NAME);
+        onCreate(sqLiteDatabase);
+
+    }
+    //-----------------------------------------------------------------------------------------------------
+
+
+    private static void openDB() {
+        Log.i(TAG, " openDB() ");
+        if (mSqLiteDatabase == null) {
+            Log.v(TAG, " mSqLiteDatabase == NULL  : initialize");
+            mSqLiteDatabase = mDBDbHelperInstance.getWritableDatabase();
+        } else {
+            //intentional
+            Log.v(TAG, " mSqLiteDatabase != NOT NULL  : return existing one");
+
         }
     }
 
+    public synchronized void closeDB() {
+        Log.i(TAG, "closeDB()");
+        if (mDBDbHelperInstance != null) {
+            Log.v(TAG, " mDBDbHelperInstance != NOT NULL  : close it : purge it");
+            mDBDbHelperInstance.close();
+            mSqLiteDatabase.close();
+            mDBDbHelperInstance = null;
+            mSqLiteDatabase = null;
+        } else {
+            Log.v(TAG, " mDBDbHelperInstance == NULL  : leave it ");
+
+        }
+    }
+
+    //-----------------------------------------------------------------------------------------------------
     public boolean insertNote(NoteModel noteModel) {
         if (LOG_DEBUG) UtilLogger.showLogInsert(TAG, noteModel);
 
@@ -61,7 +102,7 @@ public class DBMgr {
             contentValues.put(DBSchema.DB_IS_TASK_DONE, noteModel.getIsTaskDone());
             contentValues.put(DBSchema.DB_IS_ARCHIVED, noteModel.getIsArchived());
 
-            long rowId = sqLiteDatabase.insert(DBSchema.DB_TABLE_NAME, null, contentValues);
+            long rowId = mSqLiteDatabase.insert(DBSchema.DB_TABLE_NAME, null, contentValues);
             if (LOG_DEBUG) Log.w(TAG, " insert Done :  at row Id: " + rowId);
 
             return true;
@@ -73,6 +114,7 @@ public class DBMgr {
 
     public long updateNote(NoteModel noteModel) {
         if (LOG_DEBUG) UtilLogger.showLogUpdate(TAG, noteModel, noteModel.getRow_pos());
+        long updatedRow = 0;
 
         try {
 
@@ -90,61 +132,60 @@ public class DBMgr {
             contentValues.put(DBSchema.DB_IS_ARCHIVED, noteModel.getIsArchived());
 
 
-            long updatedRow = sqLiteDatabase.updateWithOnConflict(
+            updatedRow = mSqLiteDatabase.updateWithOnConflict(
                     DBSchema.DB_TABLE_NAME,
                     contentValues,
-                    DBSchema.DB_ROW_ID + " =?", new String[]{String.valueOf(noteModel.get_id())}, SQLiteDatabase.CONFLICT_REPLACE);
+                    DBSchema.DB_ROW_ID + " =?", new String[]{String.valueOf(noteModel.get_id())}, mSqLiteDatabase.CONFLICT_REPLACE);
 
             return updatedRow;
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return 0;
+        return updatedRow;
     }
 
 
     public int deleteNote(int _id) {
+        int status = 0;
         if (LOG_DEBUG) Log.w(TAG, "deleteNote : passed id " + _id);
-        int status = sqLiteDatabase.delete(DBSchema.DB_TABLE_NAME, DBSchema.DB_ROW_ID + "=?",
+        status = mSqLiteDatabase.delete(DBSchema.DB_TABLE_NAME, DBSchema.DB_ROW_ID + "=?",
                 new String[]{String.valueOf(_id)});
+        if (status == 1) {
+            if (LOG_DEBUG) Log.w(TAG, " deleted Successfully :  " + status);
+            return status;
+        }
         return status;
     }
 
-    //Getting Cursor : based on requirements
-    //complete record
+    //----------------------------------------------------------------------------------------------------------
+
     public Cursor getCursor() {
-        return sqLiteDatabase.rawQuery(DBSchema.DB_SELECT_ALL + " order by " + DBSchema.DB_CREATE_DATE + " DESC;", null);
+        return mSqLiteDatabase.rawQuery(DBSchema.DB_SELECT_ALL + " order by " + DBSchema.DB_CREATE_DATE + " DESC;", null);
     }
 
-    //search/pick  with ID
     public Cursor getCursorSearch(String passedId) {
         if (LOG_DEBUG) Log.w(TAG, " passed ID : " + passedId);
-        return sqLiteDatabase.rawQuery(DBSchema.DB_SELECT_ALL +
+        return mSqLiteDatabase.rawQuery(DBSchema.DB_SELECT_ALL +
                 " WHERE " + DBSchema.DB_ROW_ID + " = " + passedId, null);
     }
 
-    //search/pick : by isArchived
     public Cursor getCursorForArchived(String isArchived) {
         if (LOG_DEBUG) Log.w(TAG, " isArchived " + isArchived);
-        return sqLiteDatabase.rawQuery(DBSchema.DB_SELECT_ALL +
+        return mSqLiteDatabase.rawQuery(DBSchema.DB_SELECT_ALL +
                 " WHERE " + DBSchema.DB_IS_ARCHIVED + " = " + isArchived, null);
     }
 
-    //search/pick : by isArchived
     public Cursor getCursorForTaskDone(String isTaskDone) {
         if (LOG_DEBUG) Log.w(TAG, " isTaskDone " + isTaskDone);
-        return sqLiteDatabase.rawQuery(DBSchema.DB_SELECT_ALL +
+        return mSqLiteDatabase.rawQuery(DBSchema.DB_SELECT_ALL +
                 " WHERE " + DBSchema.DB_IS_TASK_DONE + " = " + isTaskDone, null);
     }
 
-    //search/pick  with alarmScheduledStatus
     public Cursor getCursorForAlarmScheduled(String passAlarmScheduledStatus) {
         if (LOG_DEBUG)
             Log.w(TAG, " pick all record with alarmScheduled 1  : " + passAlarmScheduledStatus);
-        return sqLiteDatabase.rawQuery(DBSchema.DB_SELECT_ALL +
+        return mSqLiteDatabase.rawQuery(DBSchema.DB_SELECT_ALL +
                 " WHERE " + DBSchema.DB_IS_ALARM_SCHEDULED + " = " + passAlarmScheduledStatus, null);
     }
-
-
 }

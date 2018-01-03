@@ -6,12 +6,10 @@ import android.util.Log;
 
 import com.firebase.jobdispatcher.JobParameters;
 import com.firebase.jobdispatcher.JobService;
-import com.redfox.nimbustodo.data.db.DBMgr;
-import com.redfox.nimbustodo.data.db.DBSchema;
+import com.redfox.nimbustodo.data.db.DBHelperSingleton;
 import com.redfox.nimbustodo.data.model.NoteModel;
 import com.redfox.nimbustodo.util.common_util.UtilDBOperation;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -42,9 +40,8 @@ public class DbAutoDeleteJob extends JobService {
             @Override
             public void run() {
 
-                DBMgr dbMgr = new DBMgr(DbAutoDeleteJob.this);
-                dbMgr.openDataBase();
-                Cursor cursor = dbMgr.getCursorForArchived("1");
+
+                Cursor cursor = DBHelperSingleton.getDbInstance(DbAutoDeleteJob.this).getCursorForArchived("1");
                 noteModelList = UtilDBOperation.extractCommonData(cursor, noteModelList);
 
 
@@ -55,12 +52,11 @@ public class DbAutoDeleteJob extends JobService {
 
                 for (int i = 0; i < noteModelList.size(); i++) {
                     int _id = noteModelList.get(i).get_id();
-                    int status = dbMgr.deleteNote(_id);
+                    int status = DBHelperSingleton.getDbInstance(DbAutoDeleteJob.this).deleteNote(_id);
                     if (LOG_DEBUG) Log.d(TAG, " delete status : " + status);
 
                 }
 
-                dbMgr.closeDataBase();
                 noteModelList.clear();
                 jobFinished(parameters, false);
                 if (LOG_DEBUG) Log.v(TAG, " jobFinished() called");

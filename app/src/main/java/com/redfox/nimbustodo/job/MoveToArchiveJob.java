@@ -6,12 +6,10 @@ import android.util.Log;
 
 import com.firebase.jobdispatcher.JobParameters;
 import com.firebase.jobdispatcher.JobService;
-import com.redfox.nimbustodo.data.db.DBMgr;
-import com.redfox.nimbustodo.data.db.DBSchema;
+import com.redfox.nimbustodo.data.db.DBHelperSingleton;
 import com.redfox.nimbustodo.data.model.NoteModel;
 import com.redfox.nimbustodo.util.common_util.UtilDBOperation;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -42,9 +40,7 @@ public class MoveToArchiveJob extends JobService {
             @Override
             public void run() {
 
-                DBMgr dbMgr = new DBMgr(MoveToArchiveJob.this);
-                dbMgr.openDataBase();
-                Cursor cursor = dbMgr.getCursorForTaskDone("1");
+                Cursor cursor = DBHelperSingleton.getDbInstance(MoveToArchiveJob.this).getCursorForTaskDone("1");
                 noteModelList = UtilDBOperation.extractCommonData(cursor, noteModelList);
 
 
@@ -62,12 +58,11 @@ public class MoveToArchiveJob extends JobService {
                     } else {
                         noteModel.setIsArchived(0);
                     }
-                    long status = dbMgr.updateNote(noteModel);
+                    long status = DBHelperSingleton.getDbInstance(MoveToArchiveJob.this).updateNote(noteModel);
                     if (LOG_DEBUG) Log.d(TAG, " update status : " + status);
 
                 }
 
-                dbMgr.closeDataBase();
                 noteModelList.clear();
                 jobFinished(parameters, false);
                 if (LOG_DEBUG) Log.v(TAG, " jobFinished() called");

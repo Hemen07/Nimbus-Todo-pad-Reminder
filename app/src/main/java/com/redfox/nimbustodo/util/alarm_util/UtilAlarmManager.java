@@ -9,7 +9,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.redfox.nimbustodo.data.db.DBMgr;
+import com.redfox.nimbustodo.data.db.DBHelperSingleton;
 import com.redfox.nimbustodo.data.db.DBSchema;
 import com.redfox.nimbustodo.util.common_util.UtilLogger;
 
@@ -65,9 +65,7 @@ public class UtilAlarmManager {
         } else {
             if (LOG_DEBUG) Log.e(TAG, " alarmManager null");
 
-            DBMgr dbMgr = new DBMgr(context);
-            dbMgr.openDataBase();
-            Cursor cursor = dbMgr.getCursorSearch(String.valueOf(recordId));
+            Cursor cursor = DBHelperSingleton.getDbInstance(context).getCursorSearch(String.valueOf(recordId));
 
             if (LOG_DEBUG) Log.w(TAG, " inside cursorData");
             int id = 0;
@@ -86,9 +84,6 @@ public class UtilAlarmManager {
                 cursor.close();
 
             }
-            dbMgr.closeDataBase();
-
-            System.out.println("-----------+++++" + recordId + "== " + id);
 
             ALARM_PI_REQ_CODE = 0;
             ALARM_PI_REQ_CODE = recordId;

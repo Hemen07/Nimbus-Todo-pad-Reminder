@@ -37,16 +37,16 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 
 import com.redfox.nimbustodo.R;
-import com.redfox.nimbustodo.data.db.DBMgr;
+import com.redfox.nimbustodo.data.db.DBHelperSingleton;
 import com.redfox.nimbustodo.data.model.NoteModel;
 import com.redfox.nimbustodo.data.preferences.common_pref.SPCommonMgr;
 import com.redfox.nimbustodo.ui.activity.NoteUpdateActivity;
 import com.redfox.nimbustodo.ui.adapters.NoteAdapter;
 import com.redfox.nimbustodo.ui.interfaces.AdapterCallBack;
+import com.redfox.nimbustodo.util.alarm_util.UtilAlarmManager;
 import com.redfox.nimbustodo.util.common_util.UtilCommonConstants;
 import com.redfox.nimbustodo.util.common_util.UtilDBOperation;
 import com.redfox.nimbustodo.util.common_util.UtilDialog;
-import com.redfox.nimbustodo.util.common_util.UtilExtra;
 
 
 public class FragOne extends Fragment implements AdapterCallBack, UtilDialog.AlertDialogListener {
@@ -54,7 +54,6 @@ public class FragOne extends Fragment implements AdapterCallBack, UtilDialog.Ale
     private final static String TAG = FragOne.class.getSimpleName();
     private static final boolean LOG_DEBUG = false;
     public static final String EXTRA_ANIMAL_IMAGE_TRANSITION_NAME = "image_transition_name";
-    private final static String INSTALLED_VERSION_CODE = "3";
 
 
     @BindView(R.id.fragOne_recyclerView)
@@ -88,7 +87,6 @@ public class FragOne extends Fragment implements AdapterCallBack, UtilDialog.Ale
     private SPCommonMgr commonMgr;
     private int mCardVisibility;
     private Handler handlerIntroCard;
-
 
     public static FragOne getInstance() {
         return new FragOne();
@@ -148,7 +146,6 @@ public class FragOne extends Fragment implements AdapterCallBack, UtilDialog.Ale
         recyclerView.setAdapter(noteAdapter);
     }
 
-
     @Override
     public void onRowClick(int position, View view, ImageView sharedImv) {
         if (LOG_DEBUG) Log.d(TAG, " ROW clicked at : " + position);
@@ -202,7 +199,6 @@ public class FragOne extends Fragment implements AdapterCallBack, UtilDialog.Ale
 
     }
 
-
     private void multi_select(int position) {
         if (mActionMode != null) {
 
@@ -231,6 +227,7 @@ public class FragOne extends Fragment implements AdapterCallBack, UtilDialog.Ale
             refreshAdapter();
 
         } else {
+            //intentional
             //mActionModeNull
 
         }
@@ -275,13 +272,11 @@ public class FragOne extends Fragment implements AdapterCallBack, UtilDialog.Ale
         }
     };
 
-    //vital,
     private void refreshAdapter() {
         noteAdapter.multiSelectionList = multiSelectionList;
         noteAdapter.noteModelList = noteModelList;
         noteAdapter.notifyDataSetChanged();
     }
-
 
     @Override
     public void onResume() {
@@ -309,8 +304,10 @@ public class FragOne extends Fragment implements AdapterCallBack, UtilDialog.Ale
         if (handlerIntroCard != null) {
             handlerIntroCard.removeCallbacks(null);
         }
+        if (mActionMode != null) {
+            mActionMode.finish();
+        }
     }
-
 
     @Override
     public void onDestroyView() {
@@ -320,22 +317,12 @@ public class FragOne extends Fragment implements AdapterCallBack, UtilDialog.Ale
         if (LOG_DEBUG) Log.d(TAG, "onDestroyView()");
     }
 
-
     private void loadData() {
         if (LOG_DEBUG) Log.d(TAG, " inside loadData()..");
         noteModelList.clear();
-        DBMgr dbManager = new DBMgr(v.getContext());
-        dbManager.openDataBase();
 
-        Cursor cursor = dbManager.getCursorForArchived("0");
+        Cursor cursor = DBHelperSingleton.getDbInstance(v.getContext()).getCursorForArchived("0");
         noteModelList = UtilDBOperation.extractCommonData(cursor, noteModelList);
-        dbManager.closeDataBase();
-
-
-        if (LOG_DEBUG) {
-            Log.d(TAG, "Loaded data (entry only with isArchived 0) to NoteModel Size : " + noteModelList.size());
-            Log.d(TAG, "Loaded data (entry only with isArchived 0) to NoteModel List : " + noteModelList.toString());
-        }
 
         if (noteModelList.size() == 0) {
             if (LOG_DEBUG) Log.d(TAG, " OOps, list is Empty..");
@@ -345,44 +332,45 @@ public class FragOne extends Fragment implements AdapterCallBack, UtilDialog.Ale
             noteAdapter.notifyDataSetChanged();
         }
 
-    }
+        System.out.println(noteModelList);
 
+    }
 
     @Override
     public void onPosBtnClicked(String whichOperation) {
         if (multiSelectionList.size() > 0) {
-
-            DBMgr dbManager = new DBMgr(v.getContext());
-            dbManager.openDataBase();
             NoteModel noteModel;
 
             if (whichOperation.contentEquals(UtilCommonConstants.ARCHIVE)) {
-                if (LOG_DEBUG) {
-                    Log.v(TAG, " noteModelList : list has :" + noteModelList.size());
-                    Log.v(TAG, "multi list before clear :" + multiSelectionList.size());
-                }
 
                 for (int i = 0; i < multiSelectionList.size(); i++) {
                     noteModel = multiSelectionList.get(i);
-                    System.out.println("noteModel has at pos before : " + i + " " + noteModel.toString());
+                    if (LOG_DEBUG)
+                        System.out.println("noteModel has at pos before : " + i + " " + noteModel.toString());
                     int isArchived = noteModel.getIsArchived();
                     if (isArchived == 0) {
                         noteModel.setIsArchived(1);
                     } else {
                         noteModel.setIsArchived(isArchived);
                     }
+                    int isAlarmScheduled = noteModel.getIsAlarmScheduled();
+                    if (isAlarmScheduled == 1) {
+                        UtilAlarmManager.cancelAlarm(v.getContext(), noteModel.get_id());
+                        noteModel.setScheduleTimeLong(0);
+                        noteModel.setScheduledWhenLong(0);
+                        noteModel.setScheduledTitle("notSet");
+                        noteModel.setIsAlarmScheduled(0);
+
+                    } else {
+                        //intentional
+                    }
                     if (LOG_DEBUG)
                         Log.v(TAG, "noteModel has at pos after  : " + i + " " + noteModel.toString());
 
-                    long status = dbManager.updateNote(noteModel);
-                    if (LOG_DEBUG) {
-                        Log.w(TAG, "update status : " + status);
-                        Log.v(TAG, "removing item from list : " + multiSelectionList.get(i));
-                    }
+                    long status = DBHelperSingleton.getDbInstance(v.getContext()).updateNote(noteModel);
                     noteModelList.remove(multiSelectionList.get(i));
                 }
 
-                dbManager.closeDataBase();
                 multiSelectionList.clear();
                 if (LOG_DEBUG) {
                     Log.v(TAG, "multi list after clear :" + multiSelectionList.size());
@@ -400,7 +388,7 @@ public class FragOne extends Fragment implements AdapterCallBack, UtilDialog.Ale
 
                 for (int i = 0; i < multiSelectionList.size(); i++) {
                     int _id = multiSelectionList.get(i).get_id();
-                    int status = dbManager.deleteNote(_id);
+                    int status = DBHelperSingleton.getDbInstance(v.getContext()).deleteNote(_id);
                     if (LOG_DEBUG) Log.w(TAG, "delete status : " + status);
                     if (LOG_DEBUG)
                         Log.v(TAG, "removing item from list : " + multiSelectionList.get(i));
@@ -430,7 +418,6 @@ public class FragOne extends Fragment implements AdapterCallBack, UtilDialog.Ale
         if (mActionMode != null) {
             mActionMode.finish();
         }
-
     }
 
     @OnClick(R.id.intro_card_dismiss_btn)
@@ -438,15 +425,12 @@ public class FragOne extends Fragment implements AdapterCallBack, UtilDialog.Ale
         //slide Right
         hideIntroCard(true);
         fragOneRoot.setBackgroundColor(ContextCompat.getColor(v.getContext(), R.color.frag_one_bg_color));
-
     }
-
 
     private void showIntroCard() {
         Animation slideLeft = AnimationUtils.loadAnimation(v.getContext(), R.anim.slide_left_complete);
         iC_rootLinear.setAnimation(slideLeft);
         iC_rootLinear.setVisibility(View.VISIBLE);
-
     }
 
     private void hideIntroCard(boolean withAnimation) {
@@ -456,11 +440,7 @@ public class FragOne extends Fragment implements AdapterCallBack, UtilDialog.Ale
             iC_rootLinear.setVisibility(View.GONE);
         } else {
             iC_rootLinear.setVisibility(View.GONE);
-
         }
-
     }
-
-
 
 }

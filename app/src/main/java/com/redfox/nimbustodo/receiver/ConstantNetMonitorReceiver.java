@@ -26,7 +26,6 @@ public class ConstantNetMonitorReceiver extends BroadcastReceiver implements MyH
         this.mObserverCallBack = mObserverCallBack;
     }
 
-    // pass getApp constant here : as HOST activity has many fragments
     @Override
     public void onReceive(Context context, Intent intent) {
 
@@ -55,7 +54,6 @@ public class ConstantNetMonitorReceiver extends BroadcastReceiver implements MyH
         mObserverCallBack.isContinuousNetCheck(isAvailable);
     }
 
-    //this will be invoked at onDestroy of activity,
     public void quitHandlerThread() {
         if (myHandlerThread.mhtHandler != null) {
             myHandlerThread.mhtHandler.removeCallbacks(null);

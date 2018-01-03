@@ -16,7 +16,7 @@ import android.util.Log;
 import android.widget.RemoteViews;
 
 import com.redfox.nimbustodo.R;
-import com.redfox.nimbustodo.data.db.DBMgr;
+import com.redfox.nimbustodo.data.db.DBHelperSingleton;
 import com.redfox.nimbustodo.data.db.DBSchema;
 import com.redfox.nimbustodo.util.common_util.UtilCal;
 import com.redfox.nimbustodo.util.common_util.UtilLogger;
@@ -199,9 +199,8 @@ public class UtilNotification {
 
 
     private void pickEntryById(Context context, int recordId) {
-        DBMgr dbMgr = new DBMgr(context);
-        dbMgr.openDataBase();
-        Cursor cursor = dbMgr.getCursorSearch(String.valueOf(recordId));
+
+        Cursor cursor = DBHelperSingleton.getDbInstance(context).getCursorSearch(String.valueOf(recordId));
         cursorData(cursor);
 
     }

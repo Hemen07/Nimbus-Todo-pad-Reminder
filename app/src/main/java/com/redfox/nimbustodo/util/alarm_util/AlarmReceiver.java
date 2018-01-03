@@ -4,24 +4,16 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Process;
-import android.os.VibrationEffect;
-import android.os.Vibrator;
 import android.util.Log;
 
-import com.redfox.nimbustodo.data.db.DBMgr;
-import com.redfox.nimbustodo.data.db.DBSchema;
+import com.redfox.nimbustodo.data.db.DBHelperSingleton;
 import com.redfox.nimbustodo.data.model.NoteModel;
 import com.redfox.nimbustodo.util.common_util.UtilDBOperation;
 import com.redfox.nimbustodo.util.common_util.UtilExtra;
 import com.redfox.nimbustodo.util.common_util.UtilLogger;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -80,9 +72,8 @@ public class AlarmReceiver extends BroadcastReceiver {
             @Override
             public void run() {
 
-                DBMgr dbMgr = new DBMgr(context);
-                dbMgr.openDataBase();
-                Cursor cursor = dbMgr.getCursorForAlarmScheduled("1");
+
+                Cursor cursor = DBHelperSingleton.getDbInstance(context).getCursorForAlarmScheduled("1");
                 noteModelList = UtilDBOperation.extractCommonData(cursor, noteModelList);
 
 
@@ -99,7 +90,6 @@ public class AlarmReceiver extends BroadcastReceiver {
                             , noteModelList.get(i).get_id());
                 }
 
-                dbMgr.closeDataBase();
                 noteModelList.clear();
 
 

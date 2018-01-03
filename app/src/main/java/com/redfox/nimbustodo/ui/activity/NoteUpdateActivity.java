@@ -37,7 +37,7 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.redfox.nimbustodo.R;
-import com.redfox.nimbustodo.data.db.DBMgr;
+import com.redfox.nimbustodo.data.db.DBHelperSingleton;
 import com.redfox.nimbustodo.data.model.NoteModel;
 import com.redfox.nimbustodo.data.preferences.common_pref.SPCommonMgr;
 import com.redfox.nimbustodo.ui.fragments.FragOne;
@@ -136,7 +136,6 @@ public class NoteUpdateActivity extends AppCompatActivity implements TagImageCal
     private int isTaskDone;
     private int isArchived;
 
-    private DBMgr dbMgr;
     private BottomSheetDialog dialogBottom;
     private ImageView bsImvShare;
     private CircleCheckBox bsCboxMark;
@@ -163,7 +162,6 @@ public class NoteUpdateActivity extends AppCompatActivity implements TagImageCal
         setUpToolbar();
         processData(getIntent());
         setUpDialog();
-        setUpDb();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.nav_header_bg_color));
         }
@@ -174,10 +172,7 @@ public class NoteUpdateActivity extends AppCompatActivity implements TagImageCal
         showScheduledAlarms();
         setUpTaskDoneOperations();
         setUpBottomSheetDialog();
-
-
     }
-
 
     private void setUpSharedPref() {
         spCommonMgr = new SPCommonMgr(NoteUpdateActivity.this);
@@ -219,7 +214,6 @@ public class NoteUpdateActivity extends AppCompatActivity implements TagImageCal
                 if (bundle != null) {
 
                     NoteModel noteModel = bundle.getParcelable(UtilCommonConstants.FRAGONE_TO_NU_PARCEL_KEY);
-
                     if (noteModel != null) {
 
                         if (LOG_DEBUG) Log.w(TAG, " rcv NoteModel has : " + noteModel.toString());
@@ -299,11 +293,6 @@ public class NoteUpdateActivity extends AppCompatActivity implements TagImageCal
 
     private void setUpDialog() {
         utilDialog = new UtilDialog(this, NoteUpdateActivity.this);
-    }
-
-    private void setUpDb() {
-        dbMgr = new DBMgr(NoteUpdateActivity.this);
-        dbMgr.openDataBase();
     }
 
     private void setUpHandler() {
@@ -469,7 +458,6 @@ public class NoteUpdateActivity extends AppCompatActivity implements TagImageCal
 
     }
 
-
     private void datePicker() {
         mCalendar = Calendar.getInstance();
         mYear = mCalendar.get(Calendar.YEAR);
@@ -490,8 +478,6 @@ public class NoteUpdateActivity extends AppCompatActivity implements TagImageCal
         mHour = mCalendar.get(Calendar.HOUR_OF_DAY);
         mMinute = mCalendar.get(Calendar.MINUTE);
         UtilDateTimePicker.timePicker(this, mHour, mMinute, this);
-
-
     }
 
     @Override
@@ -620,7 +606,7 @@ public class NoteUpdateActivity extends AppCompatActivity implements TagImageCal
     }
 
     private void updateEntry(String noteTitle, String extraNote) {
-        int emptyCheck = UtilDBOperation.updateEntry(dbMgr, isAlarmScheduled, scheduledTimeLong, recordPosId,
+        int emptyCheck = UtilDBOperation.updateEntry(this, isAlarmScheduled, scheduledTimeLong, recordPosId,
                 noteTitle, imageUriPath, extraNote, dateCreation, isTaskDone, isArchived, alarmTimSet);
         if (emptyCheck == 0) {
             etxTitle.setError("Can't left Empty..");
@@ -734,13 +720,10 @@ public class NoteUpdateActivity extends AppCompatActivity implements TagImageCal
                 noteModel.setIsArchived(isArchived);
             }
 
-            DBMgr dbManager = new DBMgr(NoteUpdateActivity.this);
-            dbManager.openDataBase();
 
-            long updateStatus = dbManager.updateNote(noteModel);
+            long updateStatus = DBHelperSingleton.getDbInstance(this).updateNote(noteModel);
             if (updateStatus == 1) {
             }
-            dbManager.closeDataBase();
             finish();
         }
 
@@ -783,13 +766,11 @@ public class NoteUpdateActivity extends AppCompatActivity implements TagImageCal
         if (handlerToolTips != null) {
             handlerToolTips.removeCallbacks(null);
         }
-
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
     }
-
 
 }

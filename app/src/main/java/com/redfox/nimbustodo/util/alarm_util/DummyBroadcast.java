@@ -8,7 +8,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.redfox.nimbustodo.data.db.DBMgr;
+import com.redfox.nimbustodo.data.db.DBHelperSingleton;
 import com.redfox.nimbustodo.data.db.DBSchema;
 import com.redfox.nimbustodo.data.model.NoteModel;
 import com.redfox.nimbustodo.util.common_util.UtilLogger;
@@ -25,7 +25,6 @@ public class DummyBroadcast extends BroadcastReceiver {
     private long scheduledWhenLong;
     private String scheduleTitle;
     private NoteModel noteModel;
-    private DBMgr dbMgr;
 
 
     @Override
@@ -33,8 +32,6 @@ public class DummyBroadcast extends BroadcastReceiver {
         if (LOG_DEBUG) Log.i(TAG, " onReceive()");
 
         if (intent != null && intent.getAction() != null) {
-            dbMgr = new DBMgr(context);
-            dbMgr.openDataBase();
             notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
 
@@ -56,8 +53,8 @@ public class DummyBroadcast extends BroadcastReceiver {
                         if (LOG_DEBUG)
                             UtilLogger.logDummy(TAG, scheduleTitle, scheduledWhenLong, recordPosId);
 
-                        pickEntryById(true);
-                        updateEntry();
+                        pickEntryById(true, context);
+                        updateEntry(context);
 
                     }
 
@@ -77,13 +74,11 @@ public class DummyBroadcast extends BroadcastReceiver {
                     if (LOG_DEBUG)
                         UtilLogger.logDummy(TAG, scheduleTitle, scheduledWhenLong, recordPosId);
 
-                    pickEntryById(false);
-                    updateEntry();
-                    dbMgr.closeDataBase();
+                    pickEntryById(false, context);
+                    updateEntry(context);
 
                 }
             }
-            dbMgr.closeDataBase();
 
         }
     }
@@ -94,13 +89,12 @@ public class DummyBroadcast extends BroadcastReceiver {
         }
     }
 
-    private void pickEntryById(boolean isTaskDone) {
+    private void pickEntryById(boolean isTaskDone, Context context) {
         if (LOG_DEBUG) Log.i(TAG, "pickEntryById()");
 
-        if (dbMgr != null) {
-            Cursor cursor = dbMgr.getCursorSearch(String.valueOf(recordPosId));
-            cursorData(cursor, isTaskDone);
-        }
+        Cursor cursor = DBHelperSingleton.getDbInstance(context).getCursorSearch(String.valueOf(recordPosId));
+        cursorData(cursor, isTaskDone);
+
     }
 
     private void cursorData(Cursor cursor, boolean isTaskDoneBoolean) {
@@ -142,7 +136,6 @@ public class DummyBroadcast extends BroadcastReceiver {
                     }
 
                     if (LOG_DEBUG) Log.i(TAG, " current NoteModel " + noteModel);
-
                 } while (cursor.moveToNext());
             }
             cursor.close();
@@ -150,20 +143,16 @@ public class DummyBroadcast extends BroadcastReceiver {
         }
     }
 
-    private void updateEntry() {
-        if (dbMgr != null && noteModel != null) {
+    private void updateEntry(Context context) {
+        if (noteModel != null) {
 
-            long updateNote = dbMgr.updateNote(noteModel);
+            long updateNote = DBHelperSingleton.getDbInstance(context).updateNote(noteModel);
             if (updateNote == 1) {
                 if (LOG_DEBUG) Log.i(TAG, " successfully.. updated");
             } else {
                 if (LOG_DEBUG) Log.i(TAG, " whoa whoa.....force is strong in here");
-
             }
         }
     }
-
-
-
 
 }
