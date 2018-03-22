@@ -10,6 +10,6 @@ play store demo link : https://play.google.com/store/apps/details?id=com.redfox.
 * Just pull,  pull  and pull !
 
 
-### Who do I talk to? ###
+### Privacy Policy
 
-* ME
+* https://github.com/Hemen07/nimbus-TODO--Privacy-Policy/blob/master/Privacy%20Policy
