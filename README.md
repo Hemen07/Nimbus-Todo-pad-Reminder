@@ -7,7 +7,7 @@ play store demo link : https://play.google.com/store/apps/details?id=com.redfox.
 
 ### How do I get set up? ###
 
-* Just pull,duh !
+* Just pull,  pull  and pull !
 
 
 ### Who do I talk to? ###
