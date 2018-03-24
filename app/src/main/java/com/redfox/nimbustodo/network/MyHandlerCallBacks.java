@@ -1,5 +1,5 @@
 package com.redfox.nimbustodo.network;
 
-public interface MyHandlerCallBack {
+public interface MyHandlerCallBacks {
     public void isNetAvailable(boolean isAvailable);
 }

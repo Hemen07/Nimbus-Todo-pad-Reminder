@@ -125,4 +125,21 @@ public class UtilExtra {
 
     }
 
+    public static String collapsingToolbarText() {
+        UtilCal utilCal = new UtilCal();
+        int dayOfMonth = utilCal.getDayOfMonth();
+        String monthName = utilCal.getMonthName();
+        String dayName = utilCal.getDayName();
+        String subTitleText = "";
+        if (dayOfMonth == 1) {
+            subTitleText = dayName + ", " + String.valueOf(dayOfMonth) + "st " + monthName;
+        } else if (dayOfMonth == 2) {
+            subTitleText = dayName + ", " + String.valueOf(dayOfMonth) + "nd " + monthName;
+        } else if (dayOfMonth == 3) {
+            subTitleText = dayName + ", " + String.valueOf(dayOfMonth) + "rd " + monthName;
+        } else {
+            subTitleText = dayName + ", " + String.valueOf(dayOfMonth) + "th " + monthName;
+        }
+        return subTitleText;
+    }
 }

@@ -10,18 +10,18 @@ public class UtilNetworkDetect {
     private final static String TAG = UtilNetworkDetect.class.getSimpleName();
     private final static boolean LOG_DEBUG = false;
 
-
-    public static boolean isOnline(Context context) {
+    //takes Application Context,use it anywhere
+    public static boolean checkOnline(Context context) {
         try {
-            boolean isNetTHere = false;
+            boolean isNetAvailable = false;
 
-            ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            ConnectivityManager cm = (ConnectivityManager) context.getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo netInfo = null;
             if (cm != null) {
                 netInfo = cm.getActiveNetworkInfo();
                 if (netInfo != null) {
 
-                    isNetTHere = netInfo.isConnected();
+                    isNetAvailable = netInfo.isConnected();
 
                     if (LOG_DEBUG) {
                         System.out.println(TAG + " net available :-  " + netInfo.isAvailable());
@@ -31,7 +31,7 @@ public class UtilNetworkDetect {
                 }
             }
 
-            return isNetTHere;
+            return isNetAvailable;
 
         } catch (NullPointerException e) {
             e.printStackTrace();

@@ -20,10 +20,10 @@ public class Sys {
     public String country;
     @SerializedName("sunrise")
     @Expose
-    public Integer sunrise;
+    public Double sunrise;
     @SerializedName("sunset")
     @Expose
-    public Integer sunset;
+    public Double sunset;
 
     public Integer getType() {
         return type;
@@ -57,19 +57,19 @@ public class Sys {
         this.country = country;
     }
 
-    public Integer getSunrise() {
+    public Double getSunrise() {
         return sunrise;
     }
 
-    public void setSunrise(Integer sunrise) {
+    public void setSunrise(Double sunrise) {
         this.sunrise = sunrise;
     }
 
-    public Integer getSunset() {
+    public Double getSunset() {
         return sunset;
     }
 
-    public void setSunset(Integer sunset) {
+    public void setSunset(Double sunset) {
         this.sunset = sunset;
     }
 }

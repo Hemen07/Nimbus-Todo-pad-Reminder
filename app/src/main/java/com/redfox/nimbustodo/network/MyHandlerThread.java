@@ -16,15 +16,15 @@ public class MyHandlerThread extends HandlerThread {
 
     public Handler mhtHandler;
 
-    private MyHandlerCallBack myHandlerCallBack;
+    private MyHandlerCallBacks myHandlerCallBacks;
     private Context context;
 
 
-    public MyHandlerThread(MyHandlerCallBack myHandlerCallBack, Context context) {
+    public MyHandlerThread(MyHandlerCallBacks myHandlerCallBacks, Context context) {
         super("MyHandlerThread");
         if (LOG_DEBUG)
             Log.e(TAG, "MyHandlerThread");
-        this.myHandlerCallBack = myHandlerCallBack;
+        this.myHandlerCallBacks = myHandlerCallBacks;
         this.context = context;
     }
 
@@ -40,8 +40,8 @@ public class MyHandlerThread extends HandlerThread {
                 System.out.println("HT " + "NON UI");
         }
 
-        final boolean netStatus = checkNet();
-        myHandlerCallBack.isNetAvailable(netStatus);
+        boolean netStatus = checkNet();
+        myHandlerCallBacks.isNetAvailable(netStatus);
 
         mhtHandler = new Handler(getLooper(), new Handler.Callback() {
             @Override
@@ -55,18 +55,13 @@ public class MyHandlerThread extends HandlerThread {
     }
 
     private boolean checkNet() {
-
-        boolean status = UtilNetworkDetect.isOnline(context.getApplicationContext());
-        if (status == true) {
-
+        boolean status = UtilNetworkDetect.checkOnline(context.getApplicationContext());
+        if (status) {
             if (LOG_DEBUG)
                 Log.w(TAG, " Online  ........... ");
-
         } else {
-
             if (LOG_DEBUG)
                 Log.w(TAG, " -----------  Offline");
-
         }
         return status;
     }

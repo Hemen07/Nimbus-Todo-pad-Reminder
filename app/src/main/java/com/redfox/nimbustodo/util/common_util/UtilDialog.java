@@ -2,7 +2,10 @@ package com.redfox.nimbustodo.util.common_util;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AlertDialog;
+import android.text.Html;
 
 
 public class UtilDialog {
@@ -61,6 +64,34 @@ public class UtilDialog {
         public void onNegBtnClicked();
 
         public void onNeutralClick();
+    }
+
+
+    public static void privacyPolicyDialog(final Context context, String message, String positive) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+        builder.setTitle("PRIVACY POLICY");
+        builder.setMessage(message);
+        builder.setCancelable(false);
+        builder.setPositiveButton(positive, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        final Intent i = new Intent(Intent.ACTION_VIEW);
+        i.setData(Uri.parse(UtilCommonConstants.POLICY_URL));
+        builder.setNeutralButton(Html.fromHtml("VISIT")
+                , new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        context.startActivity(i);
+                        dialog.dismiss();
+                    }
+                });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 
 }

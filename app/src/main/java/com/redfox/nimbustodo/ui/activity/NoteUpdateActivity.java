@@ -267,7 +267,7 @@ public class NoteUpdateActivity extends AppCompatActivity implements TagImageCal
             UtilLogger.logWhatWeHave(TAG, recordPosId, title, imageUriPath, subText, UtilCal.formatDate(dateCreation),
                     UtilCal.formatDate(dateUpdated), scheduledTimeLong, scheduledWhenLong, scheduleTitle, isAlarmScheduled, isTaskDone, isArchived);
 
-        if (isFromNotification == false) {
+        if (!isFromNotification) {
             String imvTransitionName = bundle.getString(FragOne.EXTRA_ANIMAL_IMAGE_TRANSITION_NAME);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 imvTag.setTransitionName(imvTransitionName);
@@ -336,7 +336,7 @@ public class NoteUpdateActivity extends AppCompatActivity implements TagImageCal
 
                 }
             }, 1500);
-            tvTaskProgress.setText("Task Completed... ");
+            tvTaskProgress.setText(R.string.task_completed);
             etxTitle.setPaintFlags(etxTitle.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 
         } else {
@@ -407,7 +407,7 @@ public class NoteUpdateActivity extends AppCompatActivity implements TagImageCal
                 if (isChecked) {
                     isTaskDone = 1;
                     relativeTaskDone.setVisibility(View.VISIBLE);
-                    tvTaskProgress.setText("Task Completed... ");
+                    tvTaskProgress.setText(R.string.task_completed);
                     etxTitle.setPaintFlags(etxTitle.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                 } else {
                     isTaskDone = 0;
@@ -422,7 +422,7 @@ public class NoteUpdateActivity extends AppCompatActivity implements TagImageCal
     @OnClick(R.id.au_editIcon)
     public void onEditTitleIconClicked() {
         if (LOG_DEBUG) Log.v(TAG, "onEditIcon clicked : Note Title");
-        if (isEditOn == true) {
+        if (isEditOn) {
             if (LOG_DEBUG) Log.v(TAG, " isEditOn : " + isEditOn);
 
             isEditOn = false;
@@ -433,7 +433,7 @@ public class NoteUpdateActivity extends AppCompatActivity implements TagImageCal
             etxTitle.requestFocus();
             UtilExtra.showKeyboard(NoteUpdateActivity.this);
 
-        } else if (isEditOn == false) {
+        } else {
             if (LOG_DEBUG) Log.v(TAG, " isEditOn : " + isEditOn);
 
             isEditOn = true;
@@ -442,8 +442,8 @@ public class NoteUpdateActivity extends AppCompatActivity implements TagImageCal
             etxTitle.setText(etxTitle.getText().toString().trim());
             etxTitle.setEnabled(false);
             etxTitle.clearFocus();
-        }
 
+        }
     }
 
     @OnClick(R.id.au_imv_alarm)
@@ -555,7 +555,7 @@ public class NoteUpdateActivity extends AppCompatActivity implements TagImageCal
     public void onImvExtraClicked() {
         if (LOG_DEBUG) Log.v(TAG, "onIconExtraNote CLicked");
 
-        if (isEditOnExtra == true) {
+        if (isEditOnExtra) {
             if (LOG_DEBUG) Log.v(TAG, " isEditOnExtra : " + isEditOnExtra);
             isEditOnExtra = false;
             imvExtra.setImageResource(R.drawable.ic_save_note);
@@ -565,7 +565,7 @@ public class NoteUpdateActivity extends AppCompatActivity implements TagImageCal
             etxExtra.requestFocus();
             UtilExtra.showKeyboard(NoteUpdateActivity.this);
 
-        } else if (isEditOnExtra == false) {
+        } else {
             if (LOG_DEBUG) Log.v(TAG, " isEditOnExtra : " + isEditOnExtra);
             isEditOnExtra = true;
             imvExtra.setImageResource(R.drawable.ic_docs);
@@ -593,7 +593,7 @@ public class NoteUpdateActivity extends AppCompatActivity implements TagImageCal
         String noteTitle = etxTitle.getText().toString().trim();
         String extraNote = etxExtra.getText().toString().trim();
 
-        if (alarmSchBoolean == true && isAlarmScheduled == 1) {
+        if (alarmSchBoolean && isAlarmScheduled == 1) {
             updateEntry(noteTitle, extraNote);
 
             UtilAlarmManager.scheduleAlarm(

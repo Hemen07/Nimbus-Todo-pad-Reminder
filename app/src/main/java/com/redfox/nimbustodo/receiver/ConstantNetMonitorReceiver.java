@@ -6,12 +6,12 @@ import android.content.Intent;
 import android.os.Looper;
 import android.util.Log;
 
-import com.redfox.nimbustodo.network.MyHandlerCallBack;
+import com.redfox.nimbustodo.network.MyHandlerCallBacks;
 import com.redfox.nimbustodo.network.MyHandlerThread;
 import com.redfox.nimbustodo.network.NetworkObserverCallBack;
 
 
-public class ConstantNetMonitorReceiver extends BroadcastReceiver implements MyHandlerCallBack {
+public class ConstantNetMonitorReceiver extends BroadcastReceiver implements MyHandlerCallBacks {
 
     private final static String TAG = ConstantNetMonitorReceiver.class.getSimpleName();
     private final static boolean LOG_DEBUG = false;

@@ -12,4 +12,11 @@
         android:orderInCategory="200"
         android:title="@string/action_settings"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/am_menu_privacy"
+        android:orderInCategory="300"
+        android:title="@string/action_privacy"
+        app:showAsAction="never" />
+
+
 </menu>

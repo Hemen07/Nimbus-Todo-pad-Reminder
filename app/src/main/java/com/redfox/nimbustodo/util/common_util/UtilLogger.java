@@ -6,7 +6,7 @@ import com.redfox.nimbustodo.data.model.NoteModel;
 
 public class UtilLogger {
 
-    private static final boolean LOG_DEBUG = true;
+    private static final boolean LOG_DEBUG = false;
 
     public static void showLogInsert(String TAG, NoteModel noteModel) {
 

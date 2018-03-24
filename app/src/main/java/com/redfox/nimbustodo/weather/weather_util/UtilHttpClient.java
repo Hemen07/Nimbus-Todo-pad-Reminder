@@ -1,9 +1,6 @@
 package com.redfox.nimbustodo.weather.weather_util;
 
-import android.content.Context;
 import android.util.Log;
-
-import com.redfox.nimbustodo.ui.activity.MainActivity;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -20,14 +17,16 @@ import static com.redfox.nimbustodo.weather.API.API_KEY;
 
 public class UtilHttpClient {
 
-    private static final boolean LOG_DEBUG = true;
+    private static final boolean LOG_DEBUG = false;
     private final static String TAG = UtilHttpClient.class.getSimpleName();
 
-    public static String fetchWeatherData(Context context, HttpURLConnection httpURLConnection, String location) {
+    public static String fetchWeatherData(String location) {
 
         if (LOG_DEBUG) {
             Log.d(TAG, " _ fetchWeatherData()");
         }
+
+        HttpURLConnection httpURLConnection = null;
         StringBuilder resultBuilder = new StringBuilder();
 
         try {
@@ -35,6 +34,7 @@ public class UtilHttpClient {
             URL url = new URL(API_HOME + "/data/2.5/weather?q=" + location + "&type=accurate&appid=" + API_KEY + "&units=metric");
             if (LOG_DEBUG)
                 Log.d(TAG, "URL : " + url.toString());
+
             httpURLConnection = (HttpURLConnection) url.openConnection();
 
             httpURLConnection.setRequestMethod("GET");
@@ -45,12 +45,7 @@ public class UtilHttpClient {
 
             int responseCode = httpURLConnection.getResponseCode();
 
-
             if (responseCode == HttpURLConnection.HTTP_OK) {
-
-                if (context != null && context instanceof MainActivity) {
-                    MainActivity.cityFound(responseCode);
-                }
 
                 InputStream inputStream;
 
@@ -70,9 +65,7 @@ public class UtilHttpClient {
 
 
             } else if (responseCode == 404) {
-                if (context != null && context instanceof MainActivity) {
-                    MainActivity.cityNotFound("404");
-                }
+                //intentional
             }
 
         } catch (IOException e) {

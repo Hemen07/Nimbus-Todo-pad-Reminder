@@ -8,16 +8,15 @@ import com.firebase.jobdispatcher.JobService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.redfox.nimbustodo.data.preferences.weather_pref.SPWeatherMgr;
-import com.redfox.nimbustodo.network.NetworkAsync;
-import com.redfox.nimbustodo.network.NetworkCallbacks;
 import com.redfox.nimbustodo.weather.model.OpenWeatherModel;
+import com.redfox.nimbustodo.weather.weather_util.UtilHttpClient;
 import com.redfox.nimbustodo.weather.weather_util.UtilNetworkDetect;
 
 
-public class WeatherJobService extends JobService implements NetworkCallbacks {
+public class WeatherJobService extends JobService {
 
     private final static String TAG = WeatherJobService.class.getSimpleName();
-    private final static boolean LOG_DEBUG = true;
+    private final static boolean LOG_DEBUG = false;
 
     private Thread myWorker = null;
     private SPWeatherMgr spWeatherMgr = null;
@@ -26,6 +25,7 @@ public class WeatherJobService extends JobService implements NetworkCallbacks {
     private String country;
     private double tempDouble;
     private String iCon;
+    private String result = null;
 
     @Override
     public boolean onStartJob(JobParameters job) {
@@ -47,14 +47,15 @@ public class WeatherJobService extends JobService implements NetworkCallbacks {
             @Override
             public void run() {
 
-                if (UtilNetworkDetect.isOnline(WeatherJobService.this) == true) {
-                    System.out.println("Net there............ fetch weather yo!");
-                    new NetworkAsync(WeatherJobService.this, WeatherJobService.this, location).execute();
+                //checkOnline takes getApplicationContext
+                if (UtilNetworkDetect.checkOnline(WeatherJobService.this)) {
+                    System.out.println("Net there............ fetch weather info!");
+                    fetchWeather(location, parameters);
                 } else {
-
                     System.out.println("NO net xxxx, finishing jobs");
+                    jobFinished(parameters, false);
+
                 }
-                jobFinished(parameters, false);
                 if (LOG_DEBUG) Log.v(TAG, " jobFinished() called");
             }
         });
@@ -62,27 +63,19 @@ public class WeatherJobService extends JobService implements NetworkCallbacks {
         myWorker.setPriority(Process.THREAD_PRIORITY_BACKGROUND);
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (LOG_DEBUG) Log.v(TAG, "onDestroy()");
 
-        if (myWorker != null) {
-            Thread thread = myWorker;
-            thread.interrupt();
-            myWorker = null;
-        }
-    }
+    private void fetchWeather(String location, JobParameters parameters) {
 
+        result = UtilHttpClient.fetchWeatherData(location);
+        if (result.length() > 0 && result != null)
+            saveToPreference(result);
 
-    @Override
-    public void onPreExecuteInfY() {
-        if (LOG_DEBUG) Log.v(TAG, "callback on Pre..");
+        jobFinished(parameters, false);
+
 
     }
 
-    @Override
-    public void onPostExecuteInfY(String result) {
+    public void saveToPreference(String result) {
 
         if (LOG_DEBUG) {
             Log.v(TAG, "callback on Post..");
@@ -113,4 +106,18 @@ public class WeatherJobService extends JobService implements NetworkCallbacks {
         }
 
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (LOG_DEBUG) Log.v(TAG, "onDestroy()");
+
+        if (myWorker != null) {
+            Thread thread = myWorker;
+            thread.interrupt();
+            myWorker = null;
+        }
+    }
+
+
 }

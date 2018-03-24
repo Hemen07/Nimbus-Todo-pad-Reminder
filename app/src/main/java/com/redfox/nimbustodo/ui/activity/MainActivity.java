@@ -45,6 +45,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.GenericTransitionOptions;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
@@ -64,7 +65,8 @@ import com.redfox.nimbustodo.ui.fragments.FragOne;
 import com.redfox.nimbustodo.ui.fragments.FragTwo;
 import com.redfox.nimbustodo.ui.interfaces.LocationCallBack;
 import com.redfox.nimbustodo.ui.interfaces.TagImageCallBacks;
-import com.redfox.nimbustodo.util.common_util.UtilCal;
+import com.redfox.nimbustodo.util.common_util.UtilCommonConstants;
+import com.redfox.nimbustodo.util.common_util.UtilDialog;
 import com.redfox.nimbustodo.util.common_util.UtilExtra;
 import com.redfox.nimbustodo.util.common_util.UtilJobs;
 import com.redfox.nimbustodo.util.common_util.UtilSnackBar;
@@ -78,7 +80,6 @@ import com.redfox.nimbustodo.weather.weather_util.UtilWeatherConstants;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import de.hdodenhof.circleimageview.CircleImageView;
 import io.github.douglasjunior.androidSimpleTooltip.SimpleTooltip;
 
 
@@ -89,8 +90,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final boolean LOG_DEBUG = false;
 
     private FirebaseRemoteConfig mFirebaseRemoteConfig;
-    private final static String VERSION_CODE_KEY = "VERSION_CODE_KEY";
-    private final static String INSTALLED_VERSION_CODE = "8";
 
 
     @BindView(R.id.am_toolbar)
@@ -118,7 +117,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @BindView(R.id.fabBottom)
     FloatingActionButton fabBottom;
     @BindView(R.id.bs_imv_tag)
-    CircleImageView bsImvTag;
+    ImageView bsImvTag;
     @BindView(R.id.bs_Etx)
     EditText bsEtx;
     @BindView(R.id.bs_imv_save)
@@ -128,10 +127,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @BindView(R.id.aa_btn_signOut)
     Button btnSignOut;
 
-    private CircleImageView navProfile;
+    private ImageView navProfile;
     private TextView navTitle;
     private TextView navEmail;
-    private CircleImageView navNetChecker;
+    private ImageView navNetIndicatorImv;
 
     private SPWeatherMgr spWeatherMgr;
 
@@ -141,8 +140,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private String iCon;
 
     private ConstantNetMonitorReceiver mReceiver;
-    private static String respCode = "";
-    private boolean isThereNetConstant = false;
+    private boolean isRelentlessNet = false;
 
     private boolean isBottomShowing = false;
     private boolean isFabShowing = false;
@@ -176,7 +174,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setUpNavigationView();
         setUpBackStackListener();
         setUpReceiver();
-        setUpConfigureButton();
+        setUpWeatherPref();
         setUpJobs();
         setUpHomeTransaction();
         isFabShowing = true;
@@ -203,16 +201,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setSupportActionBar(toolbar);
     }
 
-
     private void setUpCollapsingToolBar() {
 
-        UtilCal utilCal = new UtilCal();
-        int dayOfMonth = utilCal.getDayOfMonth();
-        String monthName = utilCal.getMonthName();
-        String dayName = utilCal.getDayName();
-
-        String subTitleText = dayName + ", " + String.valueOf(dayOfMonth) + "th " + monthName;
-
+        String subTitleText = UtilExtra.collapsingToolbarText();
         if (isSignedIn == true) {
             String arr[] = prefDisplayName.split(" ", 0);
             clpsToolbar.setTitle("Hi" + ", " + arr[0]);
@@ -251,17 +242,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void setUpNavHeader() {
         if (navView != null) {
             View navHeaderView = navView.getHeaderView(0);
-            navProfile = (CircleImageView) navHeaderView.findViewById(R.id.am_nav_header_profile);
+            navProfile = (ImageView) navHeaderView.findViewById(R.id.am_nav_header_profile);
             navTitle = (TextView) navHeaderView.findViewById(R.id.am_nav_header_Title);
             navEmail = (TextView) navHeaderView.findViewById(R.id.am_nav_header_tvEmail);
-            navNetChecker = (CircleImageView) navHeaderView.findViewById(R.id.am_nav_header_netCheckImv);
+            navNetIndicatorImv = (ImageView) navHeaderView.findViewById(R.id.am_nav_header_netCheckImv);
 
-            if (isSignedIn == false) {
+            if (!isSignedIn) {
                 loadDefaultSignInData();
             } else {
                 navTitle.setText(prefDisplayName);
                 navEmail.setText(prefEmail);
-                Glide.with(MainActivity.this).asBitmap().load(profileBitmap).into(navProfile);
+                Glide.with(MainActivity.this).asBitmap().load(profileBitmap).apply(RequestOptions.circleCropTransform()).into(navProfile);
             }
         }
     }
@@ -313,7 +304,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         registerReceiver();
     }
 
-    private void setUpConfigureButton() {
+    private void setUpWeatherPref() {
         if (spWeatherMgr.getSavedStatusForConfigureBtn() == 0) {
             btnConfig.setVisibility(View.VISIBLE);
             hideWeatherPanel();
@@ -331,11 +322,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         UtilJobs.setUpMoveToArchiveJob(this);
     }
 
-
     private void setUpHomeTransaction() {
         doTransaction(FragOne.getInstance(), true);
     }
-
 
     private void setUpHandler() {
         handlerToolTips = new Handler();
@@ -389,7 +378,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
-    //adding transaction to back stack based on boolean, for manipulating onBackpressed
+    //adding transaction to back stack based on boolean, for manipulating onBackPressed
     private void doTransaction(Fragment fragment, boolean addToBackStack) {
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
@@ -407,6 +396,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
+    //set weather from menu
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -416,23 +406,55 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.am_menu_changeCity:
 
-                if (isThereNetConstant == true) {
+                if (isRelentlessNet) {
                     if (LOG_DEBUG) Log.e(TAG, " menu change city tapped");
                     UtilLocationDialog.locationPicker(MainActivity.this, MainActivity.this);
                 } else {
                     UtilSnackBar.showSnackBar(MainActivity.this, "Net Not Available !!", UtilWeatherConstants.NO_NET);
                 }
                 break;
+            case R.id.am_menu_privacy:
+                UtilDialog.privacyPolicyDialog(this, UtilCommonConstants.POLICY_MSG, "I UNDERSTOOD ");
+                break;
             default:
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    //manually set weather first time
+    @OnClick(R.id.am_configBtn)
+    public void onViewClicked() {
+
+        if (isRelentlessNet) {
+            if (LOG_DEBUG) Log.e(TAG, " btn Taped : and Net Status : " + isRelentlessNet);
+
+            UtilLocationDialog.locationPicker(MainActivity.this, MainActivity.this);
+
+        } else {
+            if (LOG_DEBUG) Log.e(TAG, " btn Taped : and Net Status : " + isRelentlessNet);
+
+            hideWeatherPanel();
+            btnConfig.setVisibility(View.VISIBLE);
+            spWeatherMgr.saveStatusForConfigureBtn(0);
+            UtilSnackBar.showSnackBar(MainActivity.this, "Net Not Available !!", UtilWeatherConstants.NO_NET);
+        }
+    }
+
+    @Override
+    public void locationProvider(String locationName) {
+        if (LOG_DEBUG) Log.e(TAG, " locationProvider() " + locationName);
+
+        if (locationName.length() > 3) {
+            new NetworkAsync(this, MainActivity.this, locationName).execute();
+            if (LOG_DEBUG) Log.e(TAG, " typed in editText : " + locationName);
+            UtilLocationDialog.dismissDialog();
+        }
     }
 
     @Override
     public void onPreExecuteInfY() {
         if (LOG_DEBUG) Log.e(TAG, "callback on Pre..");
     }
-
 
     @Override
     public void onPostExecuteInfY(String result) {
@@ -445,43 +467,31 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void parseWeatherResponse(String result) {
-        if (result != null) {
 
+        if (result != null) {
             GsonBuilder gsonBuilder = new GsonBuilder();
             Gson gson = gsonBuilder.create();
             OpenWeatherModel openWeatherModel = gson.fromJson(result, OpenWeatherModel.class);
 
-            if (LOG_DEBUG) Log.e(TAG, " statusCode " + respCode);
+            if (result.contains("404") || result.contains("504") || result.contains("502")) {
+                hideWeatherPanel();
+                btnConfig.setVisibility(View.VISIBLE);
+                spWeatherMgr.saveStatusForConfigureBtn(0);
+                UtilSnackBar.showSnackBar(MainActivity.this, "City Not Found !! Try Another", UtilWeatherConstants.NOT_FOUND);
+            } else {
 
-            switch (respCode) {
-                case "200":
-                    if (LOG_DEBUG) Log.e(TAG, " net yes : 200 : " + respCode);
+                showWeatherPanel();
+                parseSuccess(openWeatherModel);
+                spWeatherMgr.saveDataToPreference(city, country, tempDouble, iCon);
 
-                    showWeatherPanel();
-                    parseSuccess(openWeatherModel);
-                    spWeatherMgr.saveDataToPreference(city, country, tempDouble, iCon);
+                if (city != null && city.length() > 0) {
+                    if (LOG_DEBUG)
+                        Log.e(TAG, " scheduling, city name check :- " + spWeatherMgr.getPrefCity());
 
-                    if (city != null && city.length() > 0) {
-                        if (LOG_DEBUG)
-                            Log.e(TAG, " scheduling, city name check :- " + spWeatherMgr.getPrefCity());
-
-                        UtilJobs.setUpWeatherJob(this);
-                    }
-                    btnConfig.setVisibility(View.GONE);
-                    spWeatherMgr.saveStatusForConfigureBtn(1);
-
-                    break;
-
-                case "404":
-                    if (LOG_DEBUG) Log.e(TAG, " net yes : 404 : " + respCode);
-
-                    hideWeatherPanel();
-                    btnConfig.setVisibility(View.VISIBLE);
-                    spWeatherMgr.saveStatusForConfigureBtn(0);
-                    UtilSnackBar.showSnackBar(MainActivity.this, "City Not Found !! Try Another", UtilWeatherConstants.NOT_FOUND);
-                    break;
-
-                default:
+                    UtilJobs.setUpWeatherJob(this);
+                }
+                btnConfig.setVisibility(View.GONE);
+                spWeatherMgr.saveStatusForConfigureBtn(1);
             }
         }
 
@@ -565,55 +575,32 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    public void isContinuousNetCheck(boolean isThere) {
+    public void isContinuousNetCheck(boolean isNet) {
 
-        isThereNetConstant = isThere;
-        if (LOG_DEBUG) Log.e(TAG, " constant netChecker " + isThere);
+        isRelentlessNet = isNet;
+        if (LOG_DEBUG) Log.e(TAG, " constant netChecker " + isNet);
         UtilExtra.uiCheck(MainActivity.class.getSimpleName());
 
-        if (isThere == true) {
+        if (isNet) {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    navNetChecker.setImageResource(R.color.net_check_available_color);
+
+                    Glide.with(MainActivity.this).asDrawable().load(ContextCompat.getDrawable(MainActivity.this, R.color.net_check_available_color)).
+                            apply(RequestOptions.circleCropTransform())
+                            .into(navNetIndicatorImv);
+
                 }
             });
         } else {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    navNetChecker.setImageResource(R.color.net_check_unavailable_color);
+                    Glide.with(MainActivity.this).asDrawable().load(ContextCompat.getDrawable(MainActivity.this, R.color.net_check_unavailable_color)).
+                            apply(RequestOptions.circleCropTransform())
+                            .into(navNetIndicatorImv);
                 }
             });
-        }
-    }
-
-    @OnClick(R.id.am_configBtn)
-    public void onViewClicked() {
-
-        if (isThereNetConstant == true) {
-            if (LOG_DEBUG) Log.e(TAG, " btn Taped : and Net Status : " + isThereNetConstant);
-
-            UtilLocationDialog.locationPicker(MainActivity.this, MainActivity.this);
-
-        } else if (isThereNetConstant == false) {
-            if (LOG_DEBUG) Log.e(TAG, " btn Taped : and Net Status : " + isThereNetConstant);
-
-            hideWeatherPanel();
-            btnConfig.setVisibility(View.VISIBLE);
-            spWeatherMgr.saveStatusForConfigureBtn(0);
-            UtilSnackBar.showSnackBar(MainActivity.this, "Net Not Available !!", UtilWeatherConstants.NO_NET);
-        }
-    }
-
-    @Override
-    public void locationProvider(String locationName) {
-        if (LOG_DEBUG) Log.e(TAG, " locationProvider() " + locationName);
-
-        if (locationName.length() > 3) {
-            new NetworkAsync(this, MainActivity.this, locationName).execute();
-            if (LOG_DEBUG) Log.e(TAG, " typed in editText : " + locationName);
-            UtilLocationDialog.dismissDialog();
         }
     }
 
@@ -631,18 +618,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         weatherImageIMV.setVisibility(View.GONE);
     }
 
-    public static void cityFound(int successCode) {
-        respCode = String.valueOf(successCode);
-    }
-
-    public static void cityNotFound(String errorCode) {
-        respCode = errorCode;
-    }
-
     @OnClick(R.id.fabBottom)
     public void onFabBottomClicked() {
         if (LOG_DEBUG) Log.e(TAG, "fabAdd Tapped");
-        if (isFabShowing == true) {
+        if (isFabShowing) {
             isFabShowing = false;
             isBottomShowing = true;
             showBottomLinear();
@@ -662,7 +641,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void hideBottomLinear(boolean withAnimation) {
-        if (withAnimation == true) {
+        if (withAnimation) {
             Animation slideDown = AnimationUtils.loadAnimation(this, R.anim.slide_down);
             bsRootBottomLayout.startAnimation(slideDown);
             bsRootBottomLayout.setVisibility(View.INVISIBLE);
@@ -680,7 +659,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void hideFab(boolean withAnimation) {
-        if (withAnimation == true) {
+        if (withAnimation) {
             Animation slideRight = AnimationUtils.loadAnimation(this, R.anim.slide_right);
             fabBottom.setAnimation(slideRight);
             fabBottom.setVisibility(View.INVISIBLE);
@@ -793,11 +772,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         String email = getString(R.string.profile_default_email);
         navEmail.setText(email);
         clpsToolbar.setTitle(getString(R.string.greetings));
-        Glide.with(this).asBitmap().load(R.drawable.ic_profile).into(navProfile);
+        Glide.with(this).asBitmap().load(R.drawable.ic_profile).apply(RequestOptions.circleCropTransform()).into(navProfile);
     }
 
     @OnClick(R.id.aa_btn_signOut)
     public void onViewClickedSingOut() {
+        //snubber here
     }
 
     private void initFireBaseConfig() {
@@ -814,7 +794,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void fetch() {
-        String defaultValue = mFirebaseRemoteConfig.getString(VERSION_CODE_KEY);
+        String defaultValue = mFirebaseRemoteConfig.getString(UtilCommonConstants.VERSION_CODE_KEY);
         if (LOG_DEBUG) Log.d(TAG, " LOADED DEFAULT DATA " + defaultValue);
 
         long cacheExpiration = 3600;
@@ -838,15 +818,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void remoteData() {
-        String result = mFirebaseRemoteConfig.getString(VERSION_CODE_KEY);
+        String result = mFirebaseRemoteConfig.getString(UtilCommonConstants.VERSION_CODE_KEY);
         if (LOG_DEBUG) Log.e(TAG, " LATEST DATA FETCHED : " + result);
 
-        if (result.contentEquals(INSTALLED_VERSION_CODE)) {
+        if (result.contentEquals(UtilCommonConstants.INSTALLED_VERSION_CODE)) {
             if (LOG_DEBUG)
-                Log.e(TAG, " no update required.. " + result + " : " + INSTALLED_VERSION_CODE);
+                Log.e(TAG, " no update required.. " + result + " : " + UtilCommonConstants.INSTALLED_VERSION_CODE);
         } else {
             if (LOG_DEBUG)
-                Log.e(TAG, " UPDATE AVAILABLE.. " + result + " : " + INSTALLED_VERSION_CODE);
+                Log.e(TAG, " UPDATE AVAILABLE.. " + result + " : " + UtilCommonConstants.INSTALLED_VERSION_CODE);
             UtilExtra.dialogUpdate(this);
         }
 

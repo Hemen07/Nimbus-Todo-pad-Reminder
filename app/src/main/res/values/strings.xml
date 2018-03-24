@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">nimBus TODO</string>
     <string name="action_settings">Settings</string>
+    <string name="action_privacy">Privacy Policy</string>
     <string name="action_change_city">Change City</string>
 
 
@@ -55,6 +56,7 @@
     <string name="add_entry_failed_msg">Something went unexpected !! Try Again.</string>
     <string name="emty_note_add_warning_msg">Empty Note can\'t be saved !</string>
     <string name="add_entry_msg">Task added  </string>
+    <string name="task_completed">Task Completed...</string>
 
 
 </resources>

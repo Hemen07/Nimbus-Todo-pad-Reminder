@@ -17,6 +17,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.redfox.nimbustodo.R;
 import com.redfox.nimbustodo.data.model.NoteModel;
 import com.redfox.nimbustodo.ui.interfaces.AdapterCallBack;
@@ -27,7 +28,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import de.hdodenhof.circleimageview.CircleImageView;
 
 import static com.redfox.nimbustodo.util.common_util.UtilExtra.getColoredSpanned;
 
@@ -60,7 +60,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.MyViewHolder> 
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.note_row_Imv_tag)
-        CircleImageView cimvTag;
+        ImageView tagImv;
         @BindView(R.id.note_row_tv_title)
         TextView nrTitleTv;
         @BindView(R.id.note_row_frame)
@@ -99,7 +99,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.MyViewHolder> 
         myViewHolder.nrContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mAdapterCallBack.onRowClick(myViewHolder.getAdapterPosition(), v, myViewHolder.cimvTag);
+                mAdapterCallBack.onRowClick(myViewHolder.getAdapterPosition(), v, myViewHolder.tagImv);
 
             }
         });
@@ -149,8 +149,8 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.MyViewHolder> 
     }
 
     private void setUpImageAndTransition(MyViewHolder myViewHolder, NoteModel noteModel) {
-        Glide.with(v.getContext()).load(noteModel.getImgUriPath()).into(myViewHolder.cimvTag);
-        ViewCompat.setTransitionName(myViewHolder.cimvTag, "imageViewTransName");
+        Glide.with(v.getContext()).load(noteModel.getImgUriPath()).apply(RequestOptions.circleCropTransform()).into(myViewHolder.tagImv);
+        ViewCompat.setTransitionName(myViewHolder.tagImv, "imageViewTransName");
     }
 
     private void loadDataToFields(NoteModel noteModel, MyViewHolder myViewHolder) {

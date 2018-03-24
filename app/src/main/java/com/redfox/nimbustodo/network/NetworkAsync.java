@@ -6,17 +6,13 @@ import android.util.Log;
 
 import com.redfox.nimbustodo.weather.weather_util.UtilHttpClient;
 
-import java.net.HttpURLConnection;
-
-
 public class NetworkAsync extends AsyncTask<Void, Integer, String> {
 
     private static final boolean LOG_DEBUG = false;
     private final static String TAG = NetworkAsync.class.getSimpleName();
 
-    private HttpURLConnection httpURLConnection = null;
     private String location;
-    private Context mContext;
+    private Context mContext;//use only when you sure your app is in foreground else use thread
 
 
     private NetworkCallbacks mNetworkCallbacks;
@@ -42,7 +38,7 @@ public class NetworkAsync extends AsyncTask<Void, Integer, String> {
         if (LOG_DEBUG)
             Log.i(TAG, " doInBackground");
         if (mContext != null) {
-            result = UtilHttpClient.fetchWeatherData(mContext, httpURLConnection, location);
+            result = UtilHttpClient.fetchWeatherData(location);
         }
         return result;
     }

@@ -33,7 +33,10 @@ public class UtilCommonConstants {
     public final static String INTRO_CARD_2 = "INTRO_CARD_2";
 
 
-    public final static String REMOTE_CONFIG_VALUE = "REMOTE_CONFIG_VALUE";
+    public final static String VERSION_CODE_KEY = "VERSION_CODE_KEY";
+    public final static String INSTALLED_VERSION_CODE = "11";
 
 
+    public final static String POLICY_MSG = "Phone Storage Permission required for storing Weather Information (OpenWeather), which has been scheduled to run in every 15 minutes. \n";
+    public static final String POLICY_URL = "https://github.com/Hemen07/nimbus-TODO--Privacy-Policy/blob/master/Privacy%20Policy";
 }

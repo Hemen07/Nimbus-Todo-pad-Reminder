@@ -13,5 +13,8 @@ public class UtilWeatherConstants {
     public final static String NOT_FOUND = "NOT_FOUND";
     public final static String NO_NET = "NO_NET";
 
+    public final static int E_404 = 404;
+    public final static String S_200 = "200";
+
 
 }
