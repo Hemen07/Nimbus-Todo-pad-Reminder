@@ -1,22 +1,15 @@
 # README #
 
-This README would normally document whatever steps are necessary to get your application up and running.
+A TODO pad with Reminder and CRUD operations and other useful features ( more coming)
 
-### What is this repository for? ###
-
-* A TODO with Remainder and many more useful features
+play store demo link : https://play.google.com/store/apps/details?id=com.redfox.nimbustodo
+ 
 
 ### How do I get set up? ###
 
-* Just pull,duh !
+* Just pull,  pull  and pull !
 
-### Contribution guidelines ###
 
-* Writing tests
-* Code review
-* Other guidelines
+### Privacy Policy
 
-### Who do I talk to? ###
-
-* Repo owner or admin
-* Other community or team contact
+* https://github.com/Hemen07/nimbus-TODO--Privacy-Policy/blob/master/Privacy%20Policy
