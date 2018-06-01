@@ -1,7 +1,7 @@
 # Nimbus Pad
 
-A TODO pad with Reminder   
-Sqlite
+: A TODO pad with Reminder   
+: Sqlite,Firebase Remote Config,Alarm,Job,OpenWeather
 
 play store demo link : https://play.google.com/store/apps/details?id=com.redfox.nimbustodo (Unpublished)
 
