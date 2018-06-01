@@ -1,9 +1,18 @@
-# README #
+# Nimbus Pad
 
 A TODO pad with Reminder   
 Sqlite
 
-play store demo link : https://play.google.com/store/apps/details?id=com.redfox.nimbustodo
+play store demo link : https://play.google.com/store/apps/details?id=com.redfox.nimbustodo (Unpublished)
+
+-> Grab the sample apk : [apk-debug.apk](https://github.com/Hemen07/Nimbus-Todo-pad-Reminder/blob/master/app-release.apk)
+
+- Some snaps from Nexus 5 
+
+<img src="https://github.com/Hemen07/Nimbus-Todo-pad-Reminder/blob/master/add.png" width="300"/> <img src="https://github.com/Hemen07/Nimbus-Todo-pad-Reminder/blob/master/home.png" width="300"/>  
+
+<img src="https://github.com/Hemen07/Nimbus-Todo-pad-Reminder/blob/master/NU.png" width="300"/> <img src="https://github.com/Hemen07/Nimbus-Todo-pad-Reminder/blob/master/mark.png" width="300"/>
+
  
 
 ### How do I get set up? ###
