@@ -5,7 +5,7 @@
 
 play store demo link : https://play.google.com/store/apps/details?id=com.redfox.nimbustodo (Unpublished)
 
--> Grab the sample apk : [apk-debug.apk](https://github.com/Hemen07/Nimbus-Todo-pad-Reminder/blob/master/app-release.apk)
+-> Grab the sample apk : [apk-debug.apk](https://github.com/Hemen07/Nimbus-Todo-pad-Reminder/blob/master/app-debug.apk)
 
 - Some snaps from Nexus 5 
 
