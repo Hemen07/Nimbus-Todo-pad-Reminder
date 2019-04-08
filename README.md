@@ -3,6 +3,10 @@
 : A TODO pad with Reminder   
 : Sqlite,Firebase Remote Config,Alarm,Job,OpenWeather
 
+# IMPORTANT  
+: no architecture has been implemented deliberately, kindly learn mvp clean and mvvm (if not known)   
+
+# PLAY STORE DEMO UNPUBLISHED 
 play store demo link : https://play.google.com/store/apps/details?id=com.redfox.nimbustodo (Unpublished)
 
 -> Grab the sample apk : [apk-debug.apk](https://github.com/Hemen07/Nimbus-Todo-pad-Reminder/blob/master/app-debug.apk)
